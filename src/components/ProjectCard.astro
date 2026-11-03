@@ -24,7 +24,15 @@ const href = localePath(lang, `/projects/${d.key}/`);
   <p class="card__summary">{d.summary}</p>
   {d.tags.length > 0 && <TagList tags={d.tags} lang={lang} limit={3} />}
   <div class="card__foot">
-    <span>{d.tools.length > 0 ? `${d.tools.length} ${t('projects.tools').toLowerCase()}` : d.members.join(' · ')}</span>
+    <span>
+      {
+        d.tools.length > 0
+          ? lang === 'zh'
+            ? `${d.tools.length} 个工具`
+            : `${d.tools.length} ${d.tools.length === 1 ? 'tool' : 'tools'}`
+          : d.members.join(' · ')
+      }
+    </span>
     <a class="link-arrow" href={href}>{t('common.readMore')}</a>
   </div>
 </article>
