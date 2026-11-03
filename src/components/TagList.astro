@@ -1,0 +1,32 @@
+---
+import { localePath } from '@/lib/url';
+import type { Lang } from '@/i18n/ui';
+
+interface Props {
+  tags: string[];
+  lang: Lang;
+  /** Render as links to the tag archive. */
+  linked?: boolean;
+  limit?: number;
+  class?: string;
+}
+const { tags, lang, linked = true, limit, class: cls } = Astro.props;
+const shown = limit ? tags.slice(0, limit) : tags;
+---
+<ul class:list={['tag-list', cls]}>
+  {
+    shown.map((tag) =>
+      linked ? (
+        <li>
+          <a class="tag" href={localePath(lang, `/tags/${tag}/`)}>
+            #{tag}
+          </a>
+        </li>
+      ) : (
+        <li>
+          <span class="tag">#{tag}</span>
+        </li>
+      ),
+    )
+  }
+</ul>

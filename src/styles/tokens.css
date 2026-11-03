@@ -1,0 +1,127 @@
+/* ==========================================================================
+   Design tokens — BioChaoGroup
+   A warm-paper academic palette with a teal accent (sequencing traces) and a
+   single amber highlight (warnings / "new"). Dark mode is a deep, slightly
+   green-tinted ink, not a pure black.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* surfaces */
+  --paper: #f6f4ef;
+  --paper-2: #fffefa;
+  --paper-3: #efece5;
+  --paper-inset: #eae6dd;
+
+  /* ink */
+  --ink: #131a1c;
+  --ink-2: #3b464a;
+  --ink-3: #66727a;
+  --ink-4: #8b959b;
+
+  /* lines */
+  --line: #ddd8cd;
+  --line-2: #c3bdb1;
+  --line-soft: #e8e4da;
+  --line-ink: #2a3438;
+
+  /* accent — teal, the colour of a base-call trace */
+  --accent: #0b6b57;
+  --accent-2: #0d8570;
+  --accent-ink: #064538;
+  --accent-soft: #e0eee9;
+  --accent-line: #b9d8cd;
+
+  /* warm highlight */
+  --warm: #a4570c;
+  --warm-soft: #f6e7d5;
+  --warm-line: #e8c9a6;
+
+  /* semantic */
+  --ok: #2c6e49;
+  --ok-soft: #dcece1;
+  --warn: #a4570c;
+  --warn-soft: #f6e7d5;
+  --info: #2b5570;
+  --info-soft: #dfe9ef;
+
+  /* type */
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC',
+    'Source Han Sans SC', 'Microsoft YaHei', sans-serif;
+  --font-serif: 'Source Serif 4 Variable', 'Source Serif 4', ui-serif, Georgia,
+    'Songti SC', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular,
+    Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --step--2: 0.694rem;
+  --step--1: 0.833rem;
+  --step-0: 1rem;
+  --step-1: clamp(1.12rem, 0.4vw + 1.02rem, 1.25rem);
+  --step-2: clamp(1.33rem, 1vw + 1.1rem, 1.6rem);
+  --step-3: clamp(1.6rem, 1.8vw + 1.2rem, 2.15rem);
+  --step-4: clamp(2rem, 3vw + 1.2rem, 3.1rem);
+  --step-5: clamp(2.4rem, 5.4vw + 0.8rem, 4.4rem);
+  --step-6: clamp(2.8rem, 7vw + 0.5rem, 5.6rem);
+
+  /* layout */
+  --wrap: 1180px;
+  --wrap-narrow: 860px;
+  --measure: 74ch;
+  --gutter: clamp(1.15rem, 3.2vw, 2.5rem);
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 24px;
+
+  /* depth */
+  --shadow-xs: 0 1px 2px rgb(19 26 28 / 0.05);
+  --shadow-sm: 0 1px 2px rgb(19 26 28 / 0.05), 0 4px 12px -6px rgb(19 26 28 / 0.12);
+  --shadow-md: 0 2px 4px rgb(19 26 28 / 0.04), 0 18px 40px -24px rgb(19 26 28 / 0.28);
+  --shadow-lg: 0 24px 80px -40px rgb(19 26 28 / 0.45);
+
+  /* motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.25, 1);
+  --dur: 220ms;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --paper: #0b1110;
+  --paper-2: #101917;
+  --paper-3: #0e1513;
+  --paper-inset: #16201d;
+
+  --ink: #e9efec;
+  --ink-2: #c2ccc8;
+  --ink-3: #93a09b;
+  --ink-4: #71807a;
+
+  --line: #233029;
+  --line-soft: #1b2620;
+  --line-ink: #cfe0d8;
+
+  --accent: #5bd6b0;
+  --accent-2: #7fe4c4;
+  --accent-ink: #b8f0dc;
+  --accent-soft: #123128;
+  --accent-line: #1d4b3e;
+
+  --warm: #e0a35f;
+  --warm-soft: #33241a;
+  --warm-line: #4a3320;
+
+  --ok: #77c795;
+  --ok-soft: #14291d;
+  --warn: #e0a35f;
+  --warn-soft: #33241a;
+  --info: #8fb8d4;
+  --info-soft: #16242e;
+
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4), 0 6px 18px -10px rgb(0 0 0 / 0.6);
+  --shadow-md: 0 2px 6px rgb(0 0 0 / 0.5), 0 24px 60px -30px rgb(0 0 0 / 0.8);
+  --shadow-lg: 0 30px 100px -50px rgb(0 0 0 / 0.9);
+}

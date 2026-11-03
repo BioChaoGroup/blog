@@ -1,0 +1,16 @@
+---
+import TagView from '@/components/views/TagView.astro';
+import { getPosts, getProjects, getTools } from '@/lib/content';
+import type { Lang } from '@/i18n/ui';
+
+export async function getStaticPaths() {
+  const [posts, projects, tools] = await Promise.all([getPosts('en'), getProjects('en'), getTools('en')]);
+  const tags = new Set<string>();
+  [...posts, ...projects, ...tools].forEach((entry) => entry.data.tags.forEach((tag) => tags.add(tag)));
+  return [...tags].map((tag) => ({ params: { tag }, props: { tag } }));
+}
+
+const { tag } = Astro.props as { tag: string };
+const lang: Lang = 'en';
+---
+<TagView tag={tag} lang={lang} />

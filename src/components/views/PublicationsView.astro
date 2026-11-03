@@ -1,0 +1,104 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import { publications } from '@/data/publications';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const sorted = [...publications].sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));
+const years = [...new Set(sorted.map((entry) => entry.year))];
+const labAuthor = /(Chao Fang|Fang Chao|F\.\s*Chao|Chao,?\s*F\.?)/;
+
+const linkFor = (pub: (typeof publications)[number]) => pub.url ?? (pub.doi ? `https://doi.org/${pub.doi}` : undefined);
+const typeLabel: Record<string, string> = {
+  journal: t('publications.type.journal'),
+  conference: t('publications.type.conference'),
+  preprint: t('publications.type.preprint'),
+  dataset: t('publications.type.dataset'),
+};
+---
+<BaseLayout
+  lang={lang}
+  title={t('publications.title')}
+  description={t('publications.lede')}
+  path="/publications/"
+  hasTranslation
+>
+  <div class="wrap">
+    <header class="masthead">
+      <div class="masthead__grid">
+        <div>
+          <p class="eyebrow">{t('nav.publications')}</p>
+          <h1 class="masthead__title">{t('publications.title')}</h1>
+          <p class="lede masthead__lede">{t('publications.lede')}</p>
+        </div>
+        <div class="masthead__aside">
+          <span class="masthead__count">{String(publications.length).padStart(2, '0')}</span>
+          <span>{t('nav.publications')}</span>
+        </div>
+      </div>
+    </header>
+
+    {
+      years.map((year) => (
+        <section class="pub-year">
+          <div class="pub-year__label">{year}</div>
+          <ul class="pub-list">
+            {sorted
+              .filter((entry) => entry.year === year)
+              .map((entry) => {
+                const href = linkFor(entry);
+                return (
+                  <li>
+                    <p class="pub-item__title">
+                      {href ? <a href={href}>{entry.title}</a> : entry.title}
+                      {entry.selected && <span class="badge-new" style="margin-left:0.5rem">{t('publications.selected')}</span>}
+                    </p>
+                    <p class="pub-item__authors">
+                      {entry.authors.map((author, index) => (
+                        <>
+                          {index > 0 && ', '}
+                          {labAuthor.test(author) ? <strong>{author}</strong> : author}
+                        </>
+                      ))}
+                    </p>
+                    <p class="pub-item__venue">
+                      {entry.venue} · {typeLabel[entry.type] ?? entry.type}
+                      {entry.doi && !entry.url && ` · ${t('publications.doi')} ${entry.doi}`}
+                    </p>
+                    <div class="pub-item__links">
+                      {entry.doi && (
+                        <a class="pill" href={`https://doi.org/${entry.doi}`} rel="external">
+                          {t('publications.doi')}
+                        </a>
+                      )}
+                      {entry.pdf && (
+                        <a class="pill" href={entry.pdf} rel="external">
+                          {t('publications.pdf')}
+                        </a>
+                      )}
+                      {entry.code && (
+                        <a class="pill" href={entry.code} rel="external">
+                          {t('publications.code')}
+                        </a>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
+          </ul>
+        </section>
+      ))
+    }
+
+    {
+      publications.length === 0 && (
+        <p class="lede" style="padding-bottom:3rem">{t('publications.empty')}</p>
+      )
+    }
+  </div>
+</BaseLayout>

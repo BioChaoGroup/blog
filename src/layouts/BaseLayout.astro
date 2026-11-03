@@ -1,0 +1,282 @@
+---
+/**
+ * Base layout: document shell, SEO head, theme bootstrap, site chrome and the
+ * small amount of client JS the site needs (theme, mobile nav, copy buttons,
+ * heading anchors, TOC highlighting, scroll reveal).
+ */
+import '@fontsource-variable/inter';
+import '@fontsource-variable/source-serif-4';
+import '@fontsource-variable/jetbrains-mono';
+import 'katex/dist/katex.min.css';
+import '@/styles/global.css';
+
+import SiteHeader from '@/components/SiteHeader.astro';
+import SiteFooter from '@/components/SiteFooter.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import { pageMeta, siteMeta } from '@/lib/seo';
+import { htmlLang, ogLocale, withBase } from '@/lib/url';
+import { useTranslations, type Lang } from '@/i18n/ui';
+
+interface Props {
+  lang: Lang;
+  /** Page title without the site suffix. */
+  title: string;
+  description: string;
+  /** Language-neutral path of this page, e.g. `/projects/`. */
+  path: string;
+  image?: string;
+  type?: 'website' | 'article' | 'profile';
+  noindex?: boolean;
+  hasTranslation?: boolean;
+  publishedTime?: Date;
+  modifiedTime?: Date;
+  tags?: string[];
+  authors?: string[];
+  jsonLd?: Record<string, unknown>[];
+}
+
+const {
+  lang,
+  title,
+  description,
+  path,
+  image,
+  type = 'website',
+  noindex = false,
+  hasTranslation = true,
+  publishedTime,
+  modifiedTime,
+  tags = [],
+  authors = [],
+  jsonLd = [],
+} = Astro.props;
+
+const t = useTranslations(lang);
+
+// `path` is language-neutral as passed by pages (`/`, `/projects/`, `/posts/<key>/`).
+// Everything SEO-related must use the localized path.
+const enPath = path;
+const zhPath = path === '/' ? '/zh/' : `/zh${path}`;
+const localizedPath = lang === 'zh' ? zhPath : enPath;
+
+const meta = pageMeta({
+  lang,
+  title,
+  description,
+  path: localizedPath,
+  image,
+  type,
+  noindex,
+  publishedTime,
+  modifiedTime,
+  tags,
+  authors,
+});
+
+const site = (import.meta.env.SITE ?? 'https://biochaogroup.github.io').replace(/\/+$/, '');
+const abs = (p: string) => `${site}${withBase(p)}`;
+
+const switchLink = hasTranslation
+  ? withBase(lang === 'en' ? zhPath : enPath)
+  : withBase(lang === 'en' ? '/zh/' : '/');
+
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteMeta.name,
+  alternateName: 'BioChao Group',
+  url: abs('/'),
+  email: siteMeta.email,
+  sameAs: [siteMeta.github],
+  description: siteMeta.description[lang],
+  logo: abs('/icon-512.png'),
+};
+
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteMeta.name,
+  url: abs(lang === 'zh' ? '/zh/' : '/'),
+  inLanguage: ['en', 'zh-CN'],
+  description: siteMeta.description[lang],
+};
+
+const allLd = [orgLd, websiteLd, ...jsonLd];
+const copyLabel = t('common.copy');
+const copiedLabel = t('common.copied');
+---
+<!doctype html>
+<html lang={htmlLang(lang)} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (() => {
+        try {
+          const stored = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.dataset.theme = stored || (prefersDark ? 'dark' : 'light');
+        } catch {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+
+    <title>{meta.fullTitle}</title>
+    <meta name="description" content={meta.description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={meta.canonical} />
+    <link rel="alternate" hreflang="en" href={abs(enPath)} />
+    <link rel="alternate" hreflang="zh-CN" href={abs(zhPath)} />
+    <link rel="alternate" hreflang="x-default" href={abs(enPath)} />
+    <link rel="alternate" type="application/rss+xml" title="BioChaoGroup — Posts (EN)" href={abs('/rss.xml')} />
+    <link rel="alternate" type="application/rss+xml" title="BioChaoGroup — 文章 (中文)" href={abs('/zh/rss.xml')} />
+
+    <meta name="robots" content={meta.robots} />
+    <meta
+      name="theme-color"
+      content="#f6f4ef"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta name="theme-color" content="#0b1110" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content={meta.type} />
+    <meta property="og:site_name" content={siteMeta.name} />
+    <meta property="og:title" content={meta.fullTitle} />
+    <meta property="og:description" content={meta.description} />
+    <meta property="og:url" content={meta.canonical} />
+    <meta property="og:image" content={meta.image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={ogLocale(lang)} />
+    <meta property="og:locale:alternate" content={ogLocale(lang === 'en' ? 'zh' : 'en')} />
+    {meta.publishedTime && <meta property="article:published_time" content={meta.publishedTime} />}
+    {meta.modifiedTime && <meta property="article:modified_time" content={meta.modifiedTime} />}
+    {meta.authors.map((author) => <meta property="article:author" content={author} />)}
+    {meta.tags.map((tag) => <meta property="article:tag" content={tag} />)}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={meta.fullTitle} />
+    <meta name="twitter:description" content={meta.description} />
+    <meta name="twitter:image" content={meta.image} />
+
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+    <link rel="manifest" href={withBase('/site.webmanifest')} />
+
+    <JsonLd data={allLd} />
+  </head>
+
+  <body
+    class:list={['page', `lang-${lang}`]}
+    data-copy-label={copyLabel}
+    data-copied-label={copiedLabel}
+    data-theme-toggle-label={t('theme.toggle')}
+  >
+    <a class="skip-link" href="#main">{t('nav.skip')}</a>
+    <SiteHeader lang={lang} switchHref={switchLink} hasTranslation={hasTranslation} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter lang={lang} />
+
+    <script>
+      // ---------- theme ----------
+      const root = document.documentElement;
+      const themeBtn = document.getElementById('theme-toggle');
+      themeBtn?.addEventListener('click', () => {
+        const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem('theme', next);
+        } catch {
+          /* ignore */
+        }
+      });
+
+      // ---------- mobile navigation ----------
+      const navBtn = document.getElementById('nav-toggle');
+      const closeNav = () => {
+        document.body.classList.remove('nav-open');
+        navBtn?.setAttribute('aria-expanded', 'false');
+      };
+      navBtn?.addEventListener('click', () => {
+        const open = document.body.classList.toggle('nav-open');
+        navBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.querySelectorAll('#site-nav a').forEach((link) => link.addEventListener('click', closeNav));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeNav();
+      });
+
+      // ---------- copy buttons on code blocks ----------
+      const copyLabel = document.body.dataset.copyLabel ?? 'Copy';
+      const copiedLabel = document.body.dataset.copiedLabel ?? 'Copied';
+      document.querySelectorAll('pre').forEach((pre) => {
+        if (pre.closest('.no-copy')) return;
+        const code = pre.querySelector('code');
+        if (!code || code.textContent.trim().length === 0) return;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'copy-btn';
+        btn.textContent = copyLabel;
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(code.textContent);
+            btn.textContent = copiedLabel;
+            setTimeout(() => (btn.textContent = copyLabel), 1600);
+          } catch {
+            btn.textContent = copyLabel;
+          }
+        });
+        pre.appendChild(btn);
+
+        const langName = pre.dataset.language;
+        if (langName) {
+          const tag = document.createElement('span');
+          tag.className = 'code-block__lang';
+          tag.setAttribute('aria-hidden', 'true');
+          tag.textContent = langName;
+          pre.appendChild(tag);
+        }
+      });
+
+      // ---------- heading anchors ----------
+      document.querySelectorAll('.prose h2[id], .prose h3[id]').forEach((heading) => {
+        const anchor = document.createElement('a');
+        anchor.className = 'heading-anchor';
+        anchor.href = `#${heading.id}`;
+        anchor.textContent = '#';
+        anchor.setAttribute('aria-label', `Link to ${heading.textContent}`);
+        heading.prepend(anchor);
+      });
+
+      // ---------- table of contents highlighting ----------
+      const tocLinks = Array.from(document.querySelectorAll('.toc a'));
+      if (tocLinks.length) {
+        const map = new Map<string, Element>();
+        tocLinks.forEach((link) => {
+          const id = link.getAttribute('href')?.slice(1);
+          if (id) map.set(id, link);
+        });
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              const link = map.get(entry.target.id);
+              if (!link) continue;
+              tocLinks.forEach((l) => l.classList.remove('is-active'));
+              link.classList.add('is-active');
+            }
+          },
+          { rootMargin: '-20% 0px -70% 0px' },
+        );
+        map.forEach((_, id) => {
+          const heading = document.getElementById(id);
+          if (heading) observer.observe(heading);
+        });
+      }
+
+    </script>
+  </body>
+</html>

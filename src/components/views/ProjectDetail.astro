@@ -1,0 +1,133 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import StatusBadge from '@/components/StatusBadge.astro';
+import TagList from '@/components/TagList.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import { getTools, type Project, type Post } from '@/lib/content';
+import { localePath } from '@/lib/url';
+
+interface Props {
+  project: Project;
+  lang: Lang;
+  hasTranslation: boolean;
+  relatedPosts: Post[];
+}
+const { project, lang, hasTranslation, relatedPosts } = Astro.props;
+const t = useTranslations(lang);
+const d = project.data;
+const path = `/projects/${d.key}/`;
+const tools = (await getTools(lang)).filter((tool) => d.tools.includes(tool.data.key));
+const links = [
+  ...(d.repo ? [{ label: t('projects.repo'), href: d.repo, external: true }] : []),
+  ...(d.paper ? [{ label: t('publications.doi'), href: d.paper, external: true }] : []),
+  ...d.links.map((link) => ({ label: link.label, href: link.href, external: link.href.startsWith('http') })),
+];
+---
+<BaseLayout
+  lang={lang}
+  title={d.title}
+  description={d.summary}
+  path={path}
+  hasTranslation={hasTranslation}
+  type="article"
+  image={d.cover}
+>
+  <div class="wrap">
+    <header class="detail-head">
+      <p class="detail-head__top">
+        <span class="pill">{t('nav.projects')}</span>
+        <StatusBadge status={d.status} kind="project" lang={lang} />
+        <span>{d.year}</span>
+        {d.period && <span>{d.period}</span>}
+      </p>
+      <h1 class="detail-head__title">{d.title}</h1>
+      <p class="detail-head__summary">{d.summary}</p>
+
+      <dl class="meta-table">
+        <div>
+          <dt>{t('projects.meta.status')}</dt>
+          <dd><StatusBadge status={d.status} kind="project" lang={lang} /></dd>
+        </div>
+        <div>
+          <dt>{t('projects.meta.year')}</dt>
+          <dd>{d.year}</dd>
+        </div>
+        {d.members.length > 0 && (
+          <div>
+            <dt>{t('projects.members')}</dt>
+            <dd>{d.members.join(', ')}</dd>
+          </div>
+        )}
+        {d.tools.length > 0 && (
+          <div>
+            <dt>{t('projects.tools')}</dt>
+            <dd>{d.tools.join(', ')}</dd>
+          </div>
+        )}
+      </dl>
+    </header>
+
+    <div class="detail-layout">
+      <div class="prose">
+        <slot />
+      </div>
+
+      <aside class="detail-aside">
+        {
+          links.length > 0 && (
+            <div class="aside-box">
+              <h2>{t('projects.links')}</h2>
+              <div class="aside-links">
+                {links.map((link) => (
+                  <a
+                    href={link.href}
+                    target={link.external ? '_blank' : undefined}
+                    rel={link.external ? 'noreferrer noopener' : undefined}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        {
+          tools.length > 0 && (
+            <div class="aside-box">
+              <h2>{t('projects.tools')}</h2>
+              <ul>
+                {tools.map((tool) => (
+                  <li>
+                    <a href={localePath(lang, `/tools/${tool.data.key}/`)}>{tool.data.name}</a>
+                    <span class="fine"> · {tool.data.tagline}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+
+        {
+          relatedPosts.length > 0 && (
+            <div class="aside-box">
+              <h2>{t('blog.related')}</h2>
+              <ul>
+                {relatedPosts.map((post) => (
+                  <li>
+                    <a href={localePath(lang, `/posts/${post.data.key}/`)}>{post.data.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+
+        <div class="aside-box">
+          <h2>{t('blog.tags')}</h2>
+          <TagList tags={d.tags} lang={lang} />
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

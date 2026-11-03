@@ -1,0 +1,32 @@
+---
+import ProjectDetail from '@/components/views/ProjectDetail.astro';
+import { getPosts, getProjects, getTranslationIndex } from '@/lib/content';
+import type { Post, Project } from '@/lib/content';
+import { render } from 'astro:content';
+
+interface Props {
+  project: Project;
+  hasTranslation: boolean;
+  relatedPosts: Post[];
+}
+
+export async function getStaticPaths() {
+  const projects = await getProjects('en');
+  const index = await getTranslationIndex('projects');
+  const posts = await getPosts('en');
+  return projects.map((project) => ({
+    params: { key: project.data.key },
+    props: {
+      project,
+      hasTranslation: Boolean(index.get(project.data.key)?.zh),
+      relatedPosts: posts.filter((post) => post.data.related.includes(project.data.key)),
+    },
+  }));
+}
+
+const { project, hasTranslation, relatedPosts } = Astro.props as Props;
+const { Content } = await render(project);
+---
+<ProjectDetail project={project} lang="en" hasTranslation={hasTranslation} relatedPosts={relatedPosts}>
+  <Content />
+</ProjectDetail>

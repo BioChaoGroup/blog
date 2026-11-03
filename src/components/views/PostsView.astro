@@ -1,0 +1,56 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FeaturedPost from '@/components/FeaturedPost.astro';
+import PostRow from '@/components/PostRow.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import { getPosts, tagCloud } from '@/lib/content';
+import { localePath } from '@/lib/url';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const posts = await getPosts(lang);
+const featured = posts.find((post) => post.data.featured);
+const rest = featured ? posts.filter((post) => post !== featured) : posts;
+const tags = tagCloud(posts).slice(0, 12);
+---
+<BaseLayout lang={lang} title={t('blog.title')} description={t('blog.lede')} path="/posts/" hasTranslation>
+  <div class="wrap">
+    <header class="masthead">
+      <div class="masthead__grid">
+        <div>
+          <p class="eyebrow">{t('nav.blog')}</p>
+          <h1 class="masthead__title">{t('blog.title')}</h1>
+          <p class="lede masthead__lede">{t('blog.lede')}</p>
+        </div>
+        <div class="masthead__aside">
+          <span class="masthead__count">{String(posts.length).padStart(2, '0')}</span>
+          <span>{t('home.stats.posts')}</span>
+        </div>
+      </div>
+    </header>
+
+    {posts.length === 0 && <p class="lede">{t('blog.empty')}</p>}
+
+    {featured && <FeaturedPost post={featured} lang={lang} />}
+
+    <div class="filters" aria-label={t('blog.tags')}>
+      {
+        tags.map((entry) => (
+          <a class="filter-btn" href={localePath(lang, `/tags/${entry.tag}/`)}>
+            #{entry.tag} <span class="fine">{entry.count}</span>
+          </a>
+        ))
+      }
+      <span class="filters__count">
+        {posts.length} {t('home.stats.posts')}
+      </span>
+    </div>
+
+    <ul class="post-list">
+      {rest.map((post) => <PostRow post={post} lang={lang} />)}
+    </ul>
+  </div>
+</BaseLayout>

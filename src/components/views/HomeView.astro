@@ -1,0 +1,194 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import TrackPanel from '@/components/TrackPanel.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import ToolCard from '@/components/ToolCard.astro';
+import PostRow from '@/components/PostRow.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import { researchAreas } from '@/data/research-areas';
+import { getGithubSnapshot } from '@/lib/github';
+import { publications } from '@/data/publications';
+import { getPosts, getProjects, getTools } from '@/lib/content';
+import { localePath } from '@/lib/url';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const [projects, tools, posts] = await Promise.all([getProjects(lang), getTools(lang), getPosts(lang)]);
+const featuredProjects = projects.filter((p) => p.data.featured).slice(0, 3);
+const projectCards = featuredProjects.length >= 2 ? featuredProjects : projects.slice(0, 3);
+const featuredTools = (tools.filter((x) => x.data.featured).length >= 2 ? tools.filter((x) => x.data.featured) : tools).slice(0, 3);
+const latestPosts = posts.slice(0, 3);
+const selectedPubs = [...publications]
+  .sort((a, b) => b.year - a.year)
+  .slice(0, 3);
+const gh = getGithubSnapshot();
+const stats = [
+  { value: String(projects.length).padStart(2, '0'), label: t('home.stats.projects') },
+  { value: String(tools.length).padStart(2, '0'), label: t('home.stats.tools') },
+  { value: String(posts.length).padStart(2, '0'), label: t('home.stats.posts') },
+  ...(gh ? [{ value: String(gh.totals.stars), label: 'GitHub stars' }] : []),
+];
+
+// The headline is split so the last clause can be accented without hard-coding
+// the sentence in the template.
+const headlineParts = lang === 'zh' ? ['以单分子的分辨率', '阅读基因组。'] : ['Reading genomes', 'at the resolution of single molecules.'];
+---
+<BaseLayout
+  lang={lang}
+  title={t('home.meta.title')}
+  description={t('home.intro')}
+  path="/"
+  hasTranslation
+>
+  <section class="hero">
+    <div class="wrap hero__grid">
+      <div>
+        <p class="eyebrow hero__eyebrow">{t('home.eyebrow')}</p>
+        <h1 class="hero__title">
+          {headlineParts[0]} <em>{headlineParts[1]}</em>
+        </h1>
+        <p class="hero__intro">{t('home.intro')}</p>
+        <div class="hero__actions">
+          <a class="btn btn--accent" href={localePath(lang, '/projects/')}>
+            {t('home.cta.projects')}
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <path d="M4 10h11M11 5.5 15.5 10 11 14.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+          <a class="btn btn--ghost" href={localePath(lang, '/posts/')}>{t('home.cta.blog')}</a>
+        </div>
+        <div class="hero__stats">
+          {stats.map((stat) => (
+            <div class="hero__stat">
+              <b>{stat.value}</b>
+              <span>{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="hero__visual">
+        <TrackPanel />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="research-title">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={t('home.research.eyebrow')}
+        title={t('home.research.title')}
+        id="research-title"
+      />
+      <div class="grid grid-2">
+        {
+          researchAreas.map((area) => (
+            <article class="area-card">
+              <span class="area-card__index">{area.index}</span>
+              <h3 class="area-card__title">{area.title[lang]}</h3>
+              <p class="area-card__text">{area.text[lang]}</p>
+              <div class="area-card__tags">
+                {area.tags.map((tag) => (
+                  <a class="tag" href={localePath(lang, `/tags/${tag}/`)}>
+                    #{tag}
+                  </a>
+                ))}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="projects-title">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={t('home.featured.eyebrow')}
+        title={t('home.featured.title')}
+        linkHref={localePath(lang, '/projects/')}
+        linkLabel={t('home.featured.link')}
+        id="projects-title"
+      />
+      <div class="grid grid-3">
+        {projectCards.map((project) => <ProjectCard project={project} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="tools-title">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={t('home.tools.eyebrow')}
+        title={t('home.tools.title')}
+        linkHref={localePath(lang, '/tools/')}
+        linkLabel={t('home.tools.link')}
+        id="tools-title"
+      />
+      <div class="grid grid-3">
+        {featuredTools.map((tool) => <ToolCard tool={tool} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="posts-title">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={t('home.posts.eyebrow')}
+        title={t('home.posts.title')}
+        linkHref={localePath(lang, '/posts/')}
+        linkLabel={t('home.posts.link')}
+        id="posts-title"
+      />
+      <ul class="post-list">
+        {latestPosts.map((post) => <PostRow post={post} lang={lang} />)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="pubs-title">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={t('home.pubs.eyebrow')}
+        title={t('home.pubs.title')}
+        linkHref={localePath(lang, '/publications/')}
+        linkLabel={t('home.pubs.link')}
+        id="pubs-title"
+      />
+      <ul class="pub-list">
+        {selectedPubs.map((pub) => {
+          const href = pub.url ?? (pub.doi ? `https://doi.org/${pub.doi}` : undefined);
+          return (
+            <li>
+              <p class="pub-item__title">
+                {href ? <a href={href}>{pub.title}</a> : pub.title}
+              </p>
+              <p class="pub-item__venue">
+                {pub.authors[0]}
+                {pub.authors.length > 1 ? ' et al.' : ''} · {pub.venue} · {pub.year}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="join">
+        <div>
+          <p class="eyebrow">{t('nav.contact')}</p>
+          <h2>{t('home.join.title')}</h2>
+          <p>{t('home.join.body')}</p>
+        </div>
+        <div>
+          <a class="btn btn--accent" href={`mailto:fangchao@genomics.cn`}>{t('home.join.cta')}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

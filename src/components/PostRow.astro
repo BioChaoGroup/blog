@@ -1,0 +1,32 @@
+---
+import { formatDate, localePath, readingTime } from '@/lib/url';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import type { Post } from '@/lib/content';
+
+interface Props {
+  post: Post;
+  lang: Lang;
+}
+const { post, lang } = Astro.props;
+const t = useTranslations(lang);
+const d = post.data;
+const href = localePath(lang, `/posts/${d.key}/`);
+const minutes = readingTime(post.body, lang);
+---
+<li class="post-row">
+  <div class="post-row__date">
+    <time datetime={d.date.toISOString()}>{formatDate(d.date, lang)}</time>
+    <span class="post-row__minutes">{minutes} {t('blog.minutes')}</span>
+  </div>
+  <div>
+    <h3 class="post-row__title"><a href={href}>{d.title}</a></h3>
+    <p class="post-row__desc">{d.description}</p>
+    <span class="sr-only">{t('blog.tags')}</span>
+  </div>
+  <div class="post-row__tags">
+    {d.tags.slice(0, 2).map((tag) => (
+      <a class="tag" href={localePath(lang, `/tags/${tag}/`)}>#{tag}</a>
+    ))}
+
+  </div>
+</li>

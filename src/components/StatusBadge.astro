@@ -1,0 +1,14 @@
+---
+import { useTranslations, type Lang } from '@/i18n/ui';
+
+interface Props {
+  status: string;
+  kind: 'project' | 'tool';
+  lang: Lang;
+}
+const { status, kind, lang } = Astro.props;
+const t = useTranslations(lang);
+const key = `${kind === 'project' ? 'projects' : 'tools'}.status.${status}` as const;
+const label = t(key as never);
+---
+<span class:list={['status', `status--${status}`]}>{label}</span>

@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Abstract illustration of a long DNA molecule fragmented into barcoded short reads that link distant loci">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1513"/>
+      <stop offset="0.55" stop-color="#0b1110"/>
+      <stop offset="1" stop-color="#0e1a16"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.22" cy="0.2" r="0.8">
+      <stop offset="0" stop-color="#5bd6b0" stop-opacity="0.26"/>
+      <stop offset="0.5" stop-color="#5bd6b0" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#5bd6b0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.9" cy="0.95" r="0.6">
+      <stop offset="0" stop-color="#e0a35f" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#e0a35f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#5bd6b0" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glow)"/>
+  <rect width="1200" height="675" fill="url(#glow2)"/>
+
+  <!-- left vertical barcode texture -->
+  <g opacity="0.5" fill="#5bd6b0">
+    <rect x="64" y="96" width="5" height="120" rx="2.5"/>
+    <rect x="76" y="96" width="2" height="120" rx="1"/>
+    <rect x="84" y="96" width="8" height="120" rx="4"/>
+    <rect x="98" y="96" width="3" height="120" rx="1.5"/>
+    <rect x="107" y="96" width="6" height="120" rx="3"/>
+    <rect x="119" y="96" width="2" height="120" rx="1"/>
+    <rect x="127" y="96" width="4" height="120" rx="2"/>
+  </g>
+
+  <!-- label row -->
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="2.4">
+    <text x="160" y="118" font-size="13" fill="#7f948c">MOLECULE 004182</text>
+    <text x="160" y="140" font-size="13" fill="#5bd6b0">STCLFR · COMPLETE COVERAGE</text>
+    <text x="1128" y="118" font-size="13" fill="#7f948c" text-anchor="end">40–60 KB</text>
+  </g>
+
+  <!-- long molecule -->
+  <rect x="160" y="252" width="900" height="30" rx="15" fill="#141f1c"/>
+  <g>
+    <rect x="176" y="258" width="112" height="18" rx="9" fill="#5bd6b0" opacity="0.9"/>
+    <rect x="298" y="258" width="74" height="18" rx="9" fill="#5bd6b0" opacity="0.42"/>
+    <rect x="382" y="258" width="140" height="18" rx="9" fill="#8fe8ca" opacity="0.8"/>
+    <rect x="532" y="258" width="88" height="18" rx="9" fill="#e0a35f" opacity="0.85"/>
+    <rect x="630" y="258" width="122" height="18" rx="9" fill="#5bd6b0" opacity="0.55"/>
+    <rect x="762" y="258" width="96" height="18" rx="9" fill="#8fb8d4" opacity="0.75"/>
+    <rect x="868" y="258" width="118" height="18" rx="9" fill="#5bd6b0" opacity="0.62"/>
+    <rect x="996" y="258" width="48" height="18" rx="9" fill="#8fe8ca" opacity="0.82"/>
+  </g>
+
+  <!-- reads fanning out -->
+  <g fill="none" stroke-width="5" stroke-linecap="round">
+    <g stroke="#5bd6b0" opacity="0.85">
+      <path d="M220 282v46h58"/>
+      <path d="M330 282v84h44"/>
+      <path d="M470 282v60h52"/>
+      <path d="M660 282v96h46"/>
+      <path d="M840 282v70h56"/>
+      <path d="M962 282v52h44"/>
+      <path d="M1040 282v92h40"/>
+    </g>
+    <g stroke="#e0a35f" opacity="0.85">
+      <path d="M560 282v42h40"/>
+      <path d="M800 282v108h38"/>
+    </g>
+    <g stroke="#8fb8d4" opacity="0.85">
+      <path d="M410 282v120h40"/>
+      <path d="M910 282v48h38"/>
+    </g>
+  </g>
+
+  <!-- read bars -->
+  <g>
+    <g fill="#5bd6b0">
+      <rect x="278" y="320" width="48" height="9" rx="4.5"/>
+      <rect x="278" y="340" width="32" height="9" rx="4.5" opacity="0.65"/>
+      <rect x="374" y="356" width="54" height="9" rx="4.5"/>
+      <rect x="374" y="376" width="30" height="9" rx="4.5" opacity="0.6"/>
+      <rect x="706" y="368" width="50" height="9" rx="4.5"/>
+      <rect x="706" y="388" width="38" height="9" rx="4.5" opacity="0.65"/>
+      <rect x="896" y="342" width="56" height="9" rx="4.5"/>
+      <rect x="896" y="362" width="34" height="9" rx="4.5" opacity="0.6"/>
+      <rect x="1080" y="386" width="40" height="9" rx="4.5"/>
+    </g>
+    <g fill="#e0a35f">
+      <rect x="600" y="316" width="46" height="9" rx="4.5"/>
+      <rect x="838" y="382" width="52" height="9" rx="4.5"/>
+      <rect x="838" y="402" width="26" height="9" rx="4.5" opacity="0.6"/>
+    </g>
+    <g fill="#8fb8d4">
+      <rect x="450" y="394" width="48" height="9" rx="4.5"/>
+      <rect x="948" y="322" width="44" height="9" rx="4.5"/>
+      <rect x="948" y="342" width="24" height="9" rx="4.5" opacity="0.6"/>
+    </g>
+  </g>
+
+  <!-- linkage arcs -->
+  <g fill="none" stroke-width="2.4" stroke-dasharray="7 8">
+    <path d="M302 424C380 502 660 502 730 424" stroke="#5bd6b0" opacity="0.6"/>
+    <path d="M600 434C670 494 810 494 862 434" stroke="#e0a35f" opacity="0.55"/>
+    <path d="M474 440C560 512 900 512 990 440" stroke="#8fb8d4" opacity="0.45"/>
+  </g>
+
+  <!-- baseline -->
+  <g stroke="#2a3a34" stroke-width="1">
+    <path d="M160 560h900"/>
+  </g>
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="12" fill="#5f726b" letter-spacing="2">
+    <text x="160" y="590">10 KB</text>
+    <text x="385" y="590">20 KB</text>
+    <text x="610" y="590">30 KB</text>
+    <text x="835" y="590">40 KB</text>
+    <text x="1035" y="590">50 KB</text>
+  </g>
+
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="2.6">
+    <text x="160" y="632" font-size="13" fill="#5bd6b0">BARCODE → PHYSICAL LINKAGE</text>
+    <text x="1128" y="632" font-size="13" fill="#7f948c" text-anchor="end">1 BARCODE · 37 READS</text>
+  </g>
+</svg>

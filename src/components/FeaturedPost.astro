@@ -1,0 +1,30 @@
+---
+import TagList from '@/components/TagList.astro';
+import { formatDate, localePath, readingTime } from '@/lib/url';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import type { Post } from '@/lib/content';
+
+interface Props {
+  post: Post;
+  lang: Lang;
+}
+const { post, lang } = Astro.props;
+const t = useTranslations(lang);
+const d = post.data;
+const href = localePath(lang, `/posts/${d.key}/`);
+const minutes = readingTime(post.body, lang);
+---
+<article class="featured-post reveal">
+  <div class="featured-post__body">
+    <p class="featured-post__meta">
+      <span>{t(`blog.kind.${d.kind}` as never)}</span>
+      <span aria-hidden="true">/</span>
+      <time datetime={d.date.toISOString()}>{formatDate(d.date, lang)}</time>
+      <span aria-hidden="true">/</span>
+      <span>{minutes} {t('blog.minutes')}</span>
+    </p>
+    <h2 class="featured-post__title"><a href={href}>{d.title}</a></h2>
+    <p class="lede">{d.lede ?? d.description}</p>
+    <TagList tags={d.tags} lang={lang} limit={4} />
+  </div>
+</article>

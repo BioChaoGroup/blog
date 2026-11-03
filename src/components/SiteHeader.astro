@@ -1,0 +1,105 @@
+---
+import Logo from '@/components/Logo.astro';
+import { useTranslations, languages, type Lang } from '@/i18n/ui';
+import { localePath, neutralPath } from '@/lib/url';
+
+interface Props {
+  lang: Lang;
+  /** Resolved URL of this page in the other language (falls back to its home). */
+  switchHref: string;
+  hasTranslation: boolean;
+}
+const { lang, switchHref, hasTranslation } = Astro.props;
+const t = useTranslations(lang);
+const here = neutralPath(Astro.url.pathname);
+
+const nav = [
+  { label: 'nav.projects', path: '/projects/' },
+  { label: 'nav.tools', path: '/tools/' },
+  { label: 'nav.blog', path: '/posts/' },
+  { label: 'nav.publications', path: '/publications/' },
+  { label: 'nav.team', path: '/team/' },
+] as const;
+
+const isActive = (path: string) => (path === '/' ? here === '/' : here.startsWith(path));
+const otherLang = lang === 'en' ? 'zh' : 'en';
+---
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href={localePath(lang, '/')} aria-label={t('site.name')}>
+      <Logo />
+      <span class="brand__text">
+        <span class="brand__name">BioChaoGroup</span>
+        <span class="brand__sub">{t('site.tagline')}</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label={t('nav.menu')}>
+      <a
+        class="site-nav__link"
+        href={localePath(lang, '/')}
+        aria-current={here === '/' ? 'page' : undefined}>{t('nav.home')}</a
+      >
+      {
+        nav.map((item) => (
+          <a
+            class="site-nav__link"
+            href={localePath(lang, item.path)}
+            aria-current={isActive(item.path) ? 'page' : undefined}
+          >
+            {t(item.label)}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="site-tools">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <span aria-current={lang === 'en' ? 'true' : undefined}>{languages.en.short}</span>
+        <a
+          href={switchHref}
+          hreflang={otherLang === 'en' ? 'en' : 'zh-CN'}
+          lang={otherLang === 'en' ? 'en' : 'zh-CN'}
+          title={hasTranslation ? t('nav.switchLanguageLabel') : `${t('nav.switchLanguageLabel')} · ${otherLang === 'zh' ? '暂无中文版' : 'no Chinese version yet'}`}
+          aria-current={lang === 'zh' ? 'true' : undefined}>{languages.zh.short}</a
+        >
+      </div>
+
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label={t('theme.toggle')} title={t('theme.toggle')}>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2"></circle>
+          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"></path>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.5 14.3A8.6 8.6 0 0 1 9.7 3.5a8.6 8.6 0 1 0 10.8 10.8Z"></path>
+        </svg>
+      </button>
+
+      <button
+        class="icon-btn nav-toggle"
+        id="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav"
+        aria-label={t('nav.menu')}
+        title={t('nav.menu')}
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .icon-moon {
+    display: none;
+  }
+  :global(html[data-theme='dark']) .icon-sun {
+    display: none;
+  }
+  :global(html[data-theme='dark']) .icon-moon {
+    display: block;
+  }
+</style>

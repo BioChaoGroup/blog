@@ -1,0 +1,174 @@
+{
+  "generatedAt": "2026-11-03T08:22:14.749Z",
+  "org": {
+    "login": "BioChaoGroup",
+    "name": "BioChaoGroup",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/86756016?v=4",
+    "description": null,
+    "htmlUrl": "https://github.com/BioChaoGroup",
+    "publicRepos": 13
+  },
+  "totals": {
+    "stars": 1,
+    "repos": 13
+  },
+  "repos": [
+    {
+      "name": "LabGPT",
+      "description": "BioinformaticsGPT",
+      "primaryLanguage": "HTML",
+      "stars": 1,
+      "url": "https://github.com/BioChaoGroup/LabGPT",
+      "homepage": null,
+      "updatedAt": "2024-09-28T03:45:10Z",
+      "isFork": false,
+      "archived": false
+    },
+    {
+      "name": "DCS-Harness",
+      "description": "Develop tools to help use DCS cloud easier",
+      "primaryLanguage": null,
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/DCS-Harness",
+      "homepage": null,
+      "updatedAt": "2026-08-27T14:06:14Z",
+      "isFork": true,
+      "archived": false
+    },
+    {
+      "name": "Pangaea",
+      "description": "A metagenome assembler for the linked-reads with high-barcode specificity",
+      "primaryLanguage": null,
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/Pangaea",
+      "homepage": null,
+      "updatedAt": "2024-06-26T04:24:02Z",
+      "isFork": true,
+      "archived": false
+    },
+    {
+      "name": "TUMERMETA-Melanoma",
+      "description": "Effects of Immune checkpoint inhibitor based combination therapies on gut microbiome in advanced melanoma",
+      "primaryLanguage": null,
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/TUMERMETA-Melanoma",
+      "homepage": null,
+      "updatedAt": "2023-01-10T09:23:55Z",
+      "isFork": false,
+      "archived": false
+    },
+    {
+      "name": "TUMERMETA-NPC",
+      "description": "Association analysis of nasopharyngeal carcinoma cure and gut microbiota",
+      "primaryLanguage": "R",
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/TUMERMETA-NPC",
+      "homepage": null,
+      "updatedAt": "2022-08-02T08:58:25Z",
+      "isFork": false,
+      "archived": false
+    },
+    {
+      "name": "benchmark4stcLFR",
+      "description": "pre-release code notes for stcLFR long amplicon sequencing",
+      "primaryLanguage": "Perl",
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/benchmark4stcLFR",
+      "homepage": null,
+      "updatedAt": "2023-02-23T15:52:51Z",
+      "isFork": false,
+      "archived": false
+    },
+    {
+      "name": "biciao",
+      "description": "Tools for single tube complete-coverage Long Fragment Read sequencing",
+      "primaryLanguage": null,
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/biciao",
+      "homepage": null,
+      "updatedAt": "2024-07-23T08:33:20Z",
+      "isFork": true,
+      "archived": false
+    },
+    {
+      "name": "bioelement-web",
+      "description": "Forked, A glossy Matrix collaboration client for the web.",
+      "primaryLanguage": null,
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/bioelement-web",
+      "homepage": "https://element.io",
+      "updatedAt": "2026-06-20T10:20:04Z",
+      "isFork": true,
+      "archived": false
+    },
+    {
+      "name": "caduceus-osx",
+      "description": "Bi-Directional Equivariant Long-Range DNA Sequence Modeling",
+      "primaryLanguage": "Python",
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/caduceus-osx",
+      "homepage": null,
+      "updatedAt": "2025-09-03T04:55:54Z",
+      "isFork": true,
+      "archived": false
+    },
+    {
+      "name": "mamba-ssm-macos",
+      "description": "(Unofficial) Mamba and Mamba2 SSM implementation for macOS Apple Silicon with MPS acceleration.",
+      "primaryLanguage": null,
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/mamba-ssm-macos",
+      "homepage": null,
+      "updatedAt": "2025-09-04T14:13:01Z",
+      "isFork": true,
+      "archived": false
+    },
+    {
+      "name": "metabbq",
+      "description": "Tools for single tube complete-coverage Long Fragment Read sequencing",
+      "primaryLanguage": "Perl",
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/metabbq",
+      "homepage": null,
+      "updatedAt": "2023-02-23T16:10:50Z",
+      "isFork": true,
+      "archived": false
+    },
+    {
+      "name": "openclaw-skill-bioinfoer",
+      "description": "Openclaw skill for a bioinfomatics engineer",
+      "primaryLanguage": "Shell",
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/openclaw-skill-bioinfoer",
+      "homepage": null,
+      "updatedAt": "2026-06-23T10:22:56Z",
+      "isFork": false,
+      "archived": false
+    },
+    {
+      "name": "pcr-fidelity",
+      "description": "Examining Sources of Error in PCR by Single-Molecule Sequencing",
+      "primaryLanguage": "Perl",
+      "stars": 0,
+      "url": "https://github.com/BioChaoGroup/pcr-fidelity",
+      "homepage": null,
+      "updatedAt": "2024-06-28T05:17:36Z",
+      "isFork": true,
+      "archived": false
+    }
+  ],
+  "contributors": [
+    {
+      "login": "biociao",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/9637282?v=4",
+      "htmlUrl": "https://github.com/biociao",
+      "contributions": 178
+    },
+    {
+      "login": "pengzhuobing",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/39610562?v=4",
+      "htmlUrl": "https://github.com/pengzhuobing",
+      "contributions": 4
+    }
+  ]
+}

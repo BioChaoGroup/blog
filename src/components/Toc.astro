@@ -1,0 +1,33 @@
+---
+import type { MarkdownHeading } from 'astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+
+interface Props {
+  headings: MarkdownHeading[];
+  lang: Lang;
+}
+const { headings, lang } = Astro.props;
+const t = useTranslations(lang);
+const SKIP = new Set(['footnotes', '脚注', 'references', '参考文献']);
+const items = headings.filter(
+  (h) => (h.depth === 2 || h.depth === 3) && !SKIP.has(h.text.trim().toLowerCase()),
+);
+if (items.length < 2) {
+  // A two-item table of contents is noise; render nothing.
+}
+const visible = items.length >= 2;
+---
+{
+  visible && (
+    <nav class="toc" aria-label={t('blog.toc')}>
+      <p class="toc__title">{t('blog.toc')}</p>
+      <ol>
+        {items.map((heading) => (
+          <li class={heading.depth === 3 ? 'toc__h3' : 'toc__h2'}>
+            <a href={`#${heading.slug}`}>{heading.text}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}

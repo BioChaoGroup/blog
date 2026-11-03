@@ -1,0 +1,65 @@
+---
+import Logo from '@/components/Logo.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import { localePath, withBase } from '@/lib/url';
+import { siteMeta } from '@/lib/seo';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+const yearLabel = lang === 'zh' ? `${year} 年` : String(year);
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <a class="brand" href={localePath(lang, '/')} aria-label={t('site.name')}>
+          <Logo />
+          <span class="brand__text">
+            <span class="brand__name">BioChaoGroup</span>
+            <span class="brand__sub">{t('site.tagline')}</span>
+          </span>
+        </a>
+        <p class="site-footer__tagline">{t('footer.tagline')}</p>
+      </div>
+
+      <div>
+        <p class="col-title">{t('footer.explore')}</p>
+        <ul class="footer-links">
+          <li><a href={localePath(lang, '/projects/')}>{t('nav.projects')}</a></li>
+          <li><a href={localePath(lang, '/tools/')}>{t('nav.tools')}</a></li>
+          <li><a href={localePath(lang, '/posts/')}>{t('nav.blog')}</a></li>
+          <li><a href={localePath(lang, '/publications/')}>{t('nav.publications')}</a></li>
+          <li><a href={localePath(lang, '/team/')}>{t('nav.team')}</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="col-title">{t('footer.resources')}</p>
+        <ul class="footer-links">
+          <li><a href={siteMeta.github} rel="me">{t('footer.github')}</a></li>
+          <li><a href={withBase('/rss.xml')}>{t('footer.rss')}</a></li>
+          <li><a href={withBase('/sitemap-index.xml')}>{t('footer.sitemap')}</a></li>
+          <li><a href={`${siteMeta.github}/blog`} rel="external">{t('footer.repo')}</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="col-title">{t('footer.contact')}</p>
+        <ul class="footer-links">
+          <li><a href={`mailto:${siteMeta.email}`}>{siteMeta.email}</a></li>
+          <li><a href={`${siteMeta.github}`} rel="me">github.com/BioChaoGroup</a></li>
+          <li><a href={localePath(lang, '/team/')}>{t('home.join.title')}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__base">
+      <span>© {yearLabel} BioChaoGroup · {t('footer.rights')}</span>
+      <span>{t('footer.built')}</span>
+    </div>
+  </div>
+</footer>

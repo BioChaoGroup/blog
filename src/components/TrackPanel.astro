@@ -1,0 +1,42 @@
+---
+/**
+ * Decorative "genome browser" panel for the home hero. All values are static —
+ * it is an illustration of the kind of data the group works with, not a claim
+ * about any particular dataset.
+ */
+const tracks = [
+  { label: 'molecule', bars: [7, 12, 9, 15, 11, 17, 13, 19, 14, 10, 16, 12, 18, 11, 15, 9, 13, 17, 10, 14] },
+  { label: 'barcode', bars: [4, 6, 11, 5, 13, 8, 16, 7, 12, 18, 9, 14, 6, 17, 10, 15, 8, 12, 19, 7] },
+  { label: 'coverage', bars: [18, 20, 17, 22, 19, 24, 21, 26, 23, 20, 25, 22, 27, 21, 24, 19, 23, 26, 20, 22] },
+  { label: 'gc', bars: [10, 14, 9, 16, 12, 8, 15, 11, 17, 13, 9, 15, 12, 18, 10, 14, 16, 11, 13, 9] },
+];
+const bases = 'ACGTTGCAAGCTTAGCGATCCGATGTACGGATCCA'.split('');
+const baseClass = (b: string) => `b-${b.toLowerCase()}`;
+---
+<div class="track-panel" aria-hidden="true">
+  <div class="track-panel__chrome">
+    <span class="track-panel__dots"><i></i><i></i><i></i></span>
+    <span>molecule-004182 · stcLFR</span>
+    <span style="margin-left:auto">40 kb</span>
+  </div>
+  <div class="track-panel__body">
+    {tracks.map((track) => (
+      <div class="track">
+        <span class="track__label">{track.label}</span>
+        <span class:list={['track__bars', track.label === 'gc' && 'track__bars--warm']}>
+          {track.bars.map((h) => <i style={`height:${h}px`}></i>)}
+        </span>
+      </div>
+    ))}
+    <div class="track">
+      <span class="track__label">seq</span>
+      <span class="track__seq">
+        {bases.map((b) => <b class={baseClass(b)}>{b}</b>)}
+      </span>
+    </div>
+  </div>
+  <div class="track-panel__foot">
+    <span>linked · 37 reads · 1 barcode</span>
+    <span>assembled</span>
+  </div>
+</div>

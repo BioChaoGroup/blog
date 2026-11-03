@@ -1,0 +1,96 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import { getProjects } from '@/lib/content';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const projects = await getProjects(lang);
+const statuses = ['all', 'active', 'completed', 'published', 'archived'] as const;
+const counts = Object.fromEntries(
+  statuses.map((status) => [
+    status,
+    status === 'all' ? projects.length : projects.filter((p) => p.data.status === status).length,
+  ]),
+);
+---
+<BaseLayout lang={lang} title={t('projects.title')} description={t('projects.lede')} path="/projects/" hasTranslation>
+  <div class="wrap">
+    <header class="masthead">
+      <div class="masthead__grid">
+        <div>
+          <p class="eyebrow">{t('nav.projects')}</p>
+          <h1 class="masthead__title">{t('projects.title')}</h1>
+          <p class="lede masthead__lede">{t('projects.lede')}</p>
+        </div>
+        <div class="masthead__aside">
+          <span class="masthead__count">{String(projects.length).padStart(2, '0')}</span>
+          <span>{t('home.stats.projects')}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="filters" data-filter-root>
+      {
+        statuses
+          .filter((status) => counts[status] > 0)
+          .map((status) => (
+            <button
+              class="filter-btn"
+              type="button"
+              data-filter={status}
+              aria-pressed={status === 'all' ? 'true' : 'false'}
+            >
+              {status === 'all' ? t('projects.filterAll') : t(`projects.status.${status}` as never)}
+              <span class="fine"> {counts[status]}</span>
+            </button>
+          ))
+      }
+      <span class="filters__count" data-filter-count data-total={projects.length}></span>
+    </div>
+
+    {
+      projects.length === 0 ? (
+        <p class="lede">{t('projects.empty')}</p>
+      ) : (
+        <div class="grid grid-3" data-filter-list>
+          {projects.map((project) => (
+            <div data-status={project.data.status}>
+              <ProjectCard project={project} lang={lang} />
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <script>
+    const root = document.querySelector('[data-filter-root]');
+    if (root) {
+      const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+      const items = Array.from(document.querySelectorAll<HTMLElement>('[data-filter-list] > [data-status]'));
+      const counter = root.querySelector<HTMLElement>('[data-filter-count]');
+      const total = Number(counter?.dataset.total ?? items.length);
+      const update = (status: string) => {
+        let shown = 0;
+        for (const item of items) {
+          const match = status === 'all' || item.dataset.status === status;
+          item.hidden = !match;
+          if (match) shown += 1;
+        }
+        if (counter) counter.textContent = `${shown} / ${total}`;
+      };
+      for (const button of buttons) {
+        button.addEventListener('click', () => {
+          buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+          update(button.dataset.filter || 'all');
+        });
+      }
+      update('all');
+    }
+  </script>
+</BaseLayout>

@@ -1,0 +1,81 @@
+BioChaoGroup website — licensing
+Copyright (c) 2026 BioChaoGroup
+
+This repository is released under two licences, chosen by what you are reusing:
+
+  1. Software — build configuration, Astro components, layouts, styles, the
+     scripts in scripts/, and the GitHub Actions workflows — is licensed under
+     the MIT Licence reproduced below.
+
+  2. Site content — the prose, translations, figures and images under
+     src/content/, public/images/, and the curated data under src/data/ — is
+     licensed under the Creative Commons Attribution 4.0 International Licence
+     (CC BY 4.0). You may share and adapt it, including commercially, as long as
+     you give appropriate credit, link to the licence, and indicate whether
+     changes were made.
+
+Third-party material keeps its own terms. Quoted passages, figures adapted from
+published papers, and code snippets copied from other projects remain under the
+licence of their original source and are attributed at the point of use; the
+licences below do not override those terms.
+
+---------------------------------------------------------------------------
+1. MIT Licence (software)
+---------------------------------------------------------------------------
+
+MIT License
+
+Copyright (c) 2026 BioChaoGroup
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---------------------------------------------------------------------------
+2. Creative Commons Attribution 4.0 International (site content)
+---------------------------------------------------------------------------
+
+The content of this website is licensed under CC BY 4.0.
+
+You are free to:
+
+  - Share — copy and redistribute the material in any medium or format.
+  - Adapt — remix, transform, and build upon the material for any purpose,
+    even commercially.
+
+Under the following terms:
+
+  - Attribution — You must give appropriate credit, provide a link to the
+    licence, and indicate if changes were made. You may do so in any reasonable
+    manner, but not in any way that suggests the licensor endorses you or your
+    use.
+
+  - No additional restrictions — You may not apply legal terms or technological
+    measures that legally restrict others from doing anything the licence
+    permits.
+
+  - No warranties are given. The licence may not give you all of the
+    permissions necessary for your intended use.
+
+Full licence text: https://creativecommons.org/licenses/by/4.0/legalcode
+Human-readable summary: https://creativecommons.org/licenses/by/4.0/
+
+The canonical citation for the content is the page URL on
+https://biochaogroup.github.io/blog/. A convenient attribution line is:
+
+  Chao lab (BioChaoGroup), "…", https://biochaogroup.github.io/blog/… ,
+  licensed CC BY 4.0.

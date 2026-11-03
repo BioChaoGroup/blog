@@ -1,0 +1,140 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import { team } from '@/data/team';
+import { getGithubSnapshot } from '@/lib/github';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const lead = team.find((member) => member.lead) ?? team[0];
+const others = team.filter((member) => member !== lead);
+const snapshot = getGithubSnapshot();
+
+const githubLogin = (url?: string) => (url ? url.replace(/\/+$/, '').split('/').pop() : undefined);
+
+function avatarFor(member: (typeof team)[number]): string | undefined {
+  if (member.avatar) return member.avatar;
+  const login = githubLogin(member.links.find((link) => link.github)?.github);
+  if (!login) return undefined;
+  const fromSnapshot = snapshot?.contributors.find((c) => c.login.toLowerCase() === login.toLowerCase());
+  return fromSnapshot?.avatarUrl ?? `https://github.com/${login}.png?size=200`;
+}
+
+const linkLabel: Record<string, string> = {
+  github: 'GitHub',
+  email: 'Email',
+  scholar: 'Scholar',
+  orcid: 'ORCID',
+  site: 'Website',
+};
+---
+<BaseLayout
+  lang={lang}
+  title={t('team.title')}
+  description={t('team.lede')}
+  path="/team/"
+  hasTranslation
+  type="profile"
+>
+  <div class="wrap">
+    <header class="masthead">
+      <div class="masthead__grid">
+        <div>
+          <p class="eyebrow">{t('nav.team')}</p>
+          <h1 class="masthead__title">{t('team.title')}</h1>
+          <p class="lede masthead__lede">{t('team.lede')}</p>
+        </div>
+        <div class="masthead__aside">
+          <span class="masthead__count">{String(team.length).padStart(2, '0')}</span>
+          <span>{t('team.people')}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid grid-2" style="padding-bottom:clamp(2rem,4vw,3.2rem)">
+      <article class="member-card member-card--lead" id={lead.key}>
+        {avatarFor(lead) && <img class="avatar" src={avatarFor(lead)} alt="" width="80" height="80" loading="lazy" />}
+        <div>
+          <h2 class="member-card__name">
+            {lead.name}
+            {lang === 'zh' ? `（${lead.nameZh}）` : ` · ${lead.nameZh}`}
+          </h2>
+          <p class="member-card__role">{lead.role[lang]}</p>
+          <p class="member-card__bio">{lead.bio[lang]}</p>
+          <div class="member-card__links">
+            {
+              lead.links.map((link) => {
+                const [kind, href] = Object.entries(link)[0] as [string, string];
+                return (
+                  <a href={kind === 'email' ? `mailto:${href}` : href} rel={kind === 'email' ? undefined : 'me noopener'}>
+                    {linkLabel[kind] ?? kind}
+                  </a>
+                );
+              })
+            }
+          </div>
+        </div>
+      </article>
+
+      {
+        others.length > 0 &&
+          others.map((member) => (
+            <article class="member-card" id={member.key}>
+              {avatarFor(member) && <img class="avatar" src={avatarFor(member)} alt="" width="52" height="52" loading="lazy" />}
+              <h2 class="member-card__name">
+                {member.name} {lang === 'zh' ? `（${member.nameZh}）` : ` · ${member.nameZh}`}
+              </h2>
+              <p class="member-card__role">{member.role[lang]}</p>
+              <p class="member-card__bio">{member.bio[lang]}</p>
+              <div class="member-card__links">
+                {member.links.map((link) => {
+                  const [kind, href] = Object.entries(link)[0] as [string, string];
+                  return (
+                    <a href={kind === 'email' ? `mailto:${href}` : href}>
+                      {linkLabel[kind] ?? kind}
+                    </a>
+                  );
+                })}
+              </div>
+            </article>
+          ))
+      }
+    </div>
+
+    {
+      snapshot && snapshot.contributors.length > 0 && (
+        <section class="section" style="padding-top:0">
+          <h2 class="col-title">{t('team.openSource')}</h2>
+          <ul class="contributor-list">
+            {snapshot.contributors.map((contributor) => (
+              <li>
+                <a class="contributor" href={contributor.htmlUrl} rel="external noopener">
+                  <img src={contributor.avatarUrl} alt="" width="24" height="24" loading="lazy" />
+                  {contributor.login}
+                  <span class="fine">{contributor.contributions}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="section" style="padding-top:0;padding-bottom:clamp(2.4rem,5vw,4rem)">
+      <div class="join">
+        <div>
+          <p class="eyebrow">{t('team.join.title')}</p>
+          <h2>{t('home.join.title')}</h2>
+          <p>{t('team.join.body')}</p>
+        </div>
+        <div>
+          <a class="btn btn--accent" href="mailto:fangchao@genomics.cn">{t('home.join.cta')}</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

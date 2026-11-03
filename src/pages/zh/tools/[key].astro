@@ -1,0 +1,32 @@
+---
+import ToolDetail from '@/components/views/ToolDetail.astro';
+import { getPosts, getTools, getTranslationIndex } from '@/lib/content';
+import type { Post, Tool } from '@/lib/content';
+import { render } from 'astro:content';
+
+interface Props {
+  tool: Tool;
+  hasTranslation: boolean;
+  relatedPosts: Post[];
+}
+
+export async function getStaticPaths() {
+  const tools = await getTools('zh');
+  const index = await getTranslationIndex('tools');
+  const posts = await getPosts('zh');
+  return tools.map((tool) => ({
+    params: { key: tool.data.key },
+    props: {
+      tool,
+      hasTranslation: Boolean(index.get(tool.data.key)?.en),
+      relatedPosts: posts.filter((post) => post.data.related.includes(tool.data.key)),
+    },
+  }));
+}
+
+const { tool, hasTranslation, relatedPosts } = Astro.props as Props;
+const { Content } = await render(tool);
+---
+<ToolDetail tool={tool} lang="zh" hasTranslation={hasTranslation} relatedPosts={relatedPosts}>
+  <Content />
+</ToolDetail>

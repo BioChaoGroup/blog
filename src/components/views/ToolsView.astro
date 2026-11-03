@@ -1,0 +1,96 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ToolCard from '@/components/ToolCard.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import { getTools } from '@/lib/content';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const tools = await getTools(lang);
+const categories = ['all', 'sequencing', 'assembly', 'metagenomics', 'genomics', 'machine-learning', 'visualization', 'infrastructure'] as const;
+const counts = Object.fromEntries(
+  categories.map((category) => [
+    category,
+    category === 'all' ? tools.length : tools.filter((tool) => tool.data.category === category).length,
+  ]),
+);
+---
+<BaseLayout lang={lang} title={t('tools.title')} description={t('tools.lede')} path="/tools/" hasTranslation>
+  <div class="wrap">
+    <header class="masthead">
+      <div class="masthead__grid">
+        <div>
+          <p class="eyebrow">{t('nav.tools')}</p>
+          <h1 class="masthead__title">{t('tools.title')}</h1>
+          <p class="lede masthead__lede">{t('tools.lede')}</p>
+        </div>
+        <div class="masthead__aside">
+          <span class="masthead__count">{String(tools.length).padStart(2, '0')}</span>
+          <span>{t('home.stats.tools')}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="filters" data-filter-root>
+      {
+        categories
+          .filter((category) => counts[category] > 0)
+          .map((category) => (
+            <button
+              class="filter-btn"
+              type="button"
+              data-filter={category}
+              aria-pressed={category === 'all' ? 'true' : 'false'}
+            >
+              {category === 'all' ? t('projects.filterAll') : t(`tools.category.${category}` as never)}
+              <span class="fine"> {counts[category]}</span>
+            </button>
+          ))
+      }
+      <span class="filters__count" data-filter-count data-total={tools.length}></span>
+    </div>
+
+    {
+      tools.length === 0 ? (
+        <p class="lede">{t('tools.empty')}</p>
+      ) : (
+        <div class="grid grid-3" data-filter-list>
+          {tools.map((tool) => (
+            <div data-status={tool.data.category}>
+              <ToolCard tool={tool} lang={lang} />
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <script>
+    const root = document.querySelector('[data-filter-root]');
+    if (root) {
+      const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+      const items = Array.from(document.querySelectorAll<HTMLElement>('[data-filter-list] > [data-status]'));
+      const counter = root.querySelector<HTMLElement>('[data-filter-count]');
+      const total = Number(counter?.dataset.total ?? items.length);
+      const update = (category: string) => {
+        let shown = 0;
+        for (const item of items) {
+          const match = category === 'all' || item.dataset.status === category;
+          item.hidden = !match;
+          if (match) shown += 1;
+        }
+        if (counter) counter.textContent = `${shown} / ${total}`;
+      };
+      for (const button of buttons) {
+        button.addEventListener('click', () => {
+          buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+          update(button.dataset.filter || 'all');
+        });
+      }
+      update('all');
+    }
+  </script>
+</BaseLayout>

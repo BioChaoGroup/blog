@@ -1,0 +1,30 @@
+---
+import StatusBadge from '@/components/StatusBadge.astro';
+import TagList from '@/components/TagList.astro';
+import { localePath } from '@/lib/url';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import type { Project } from '@/lib/content';
+
+interface Props {
+  project: Project;
+  lang: Lang;
+}
+const { project, lang } = Astro.props;
+const t = useTranslations(lang);
+const d = project.data;
+const href = localePath(lang, `/projects/${d.key}/`);
+---
+<article class="card card--project" data-status={d.status}>
+  <div class="card__meta">
+    <StatusBadge status={d.status} kind="project" lang={lang} />
+    <span>{d.year}</span>
+    {!d.repo && <span class="badge-new">{t('projects.internal')}</span>}
+  </div>
+  <h3 class="card__title"><a href={href}>{d.title}</a></h3>
+  <p class="card__summary">{d.summary}</p>
+  {d.tags.length > 0 && <TagList tags={d.tags} lang={lang} limit={3} />}
+  <div class="card__foot">
+    <span>{d.tools.length > 0 ? `${d.tools.length} ${t('projects.tools').toLowerCase()}` : d.members.join(' · ')}</span>
+    <a class="link-arrow" href={href}>{t('common.readMore')}</a>
+  </div>
+</article>

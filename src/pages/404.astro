@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { useTranslations } from '@/i18n/ui';
+import { localePath } from '@/lib/url';
+
+const en = useTranslations('en');
+const zh = useTranslations('zh');
+---
+<BaseLayout
+  lang="en"
+  title={`404 — ${en('404.title')}`}
+  description={en('404.body')}
+  path="/404/"
+  noindex
+  hasTranslation={false}
+>
+  <div class="wrap">
+    <div class="notfound">
+      <p class="notfound__code">404</p>
+      <h1>{en('404.title')} / {zh('404.title')}</h1>
+      <p class="lede">{en('404.body')}</p>
+      <p class="lede" lang="zh-CN">{zh('404.body')}</p>
+      <div class="hero__actions">
+        <a class="btn btn--accent" href={localePath('en', '/')}>{en('404.home')}</a>
+        <a class="btn btn--ghost" href={localePath('zh', '/')} lang="zh-CN">{zh('404.home')}</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,61 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import { getPosts, getProjects, getTools } from '@/lib/content';
+import { localePath } from '@/lib/url';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const [posts, projects, tools] = await Promise.all([getPosts(lang), getProjects(lang), getTools(lang)]);
+const counts = new Map<string, { posts: number; projects: number; tools: number }>();
+const bump = (tag: string, kind: 'posts' | 'projects' | 'tools') => {
+  const entry = counts.get(tag) ?? { posts: 0, projects: 0, tools: 0 };
+  entry[kind] += 1;
+  counts.set(tag, entry);
+};
+posts.forEach((p) => p.data.tags.forEach((tag) => bump(tag, 'posts')));
+projects.forEach((p) => p.data.tags.forEach((tag) => bump(tag, 'projects')));
+tools.forEach((p) => p.data.tags.forEach((tag) => bump(tag, 'tools')));
+const tags = [...counts.entries()].sort((a, b) => {
+  const totalA = a[1].posts + a[1].projects + a[1].tools;
+  const totalB = b[1].posts + b[1].projects + b[1].tools;
+  return totalB - totalA || a[0].localeCompare(b[0]);
+});
+---
+<BaseLayout lang={lang} title={t('tags.title')} description={t('tags.lede')} path="/tags/" hasTranslation>
+  <div class="wrap">
+    <header class="masthead">
+      <div class="masthead__grid">
+        <div>
+          <p class="eyebrow">{t('tags.title')}</p>
+          <h1 class="masthead__title">{t('tags.title')}</h1>
+          <p class="lede masthead__lede">{t('tags.lede')}</p>
+        </div>
+        <div class="masthead__aside">
+          <span class="masthead__count">{String(tags.length).padStart(2, '0')}</span>
+          <span>{t('tags.title')}</span>
+        </div>
+      </div>
+    </header>
+
+    <ul class="tag-list" style="gap:0.5rem;padding-bottom:3rem">
+      {
+        tags.map(([tag, count]) => (
+          <li>
+            <a class="tag" href={localePath(lang, `/tags/${tag}/`)}>
+              #{tag}
+              <span class="fine">
+                {count.posts > 0 ? ` ${count.posts}` : ''}
+                {count.projects > 0 ? ` · ${count.projects}P` : ''}
+                {count.tools > 0 ? ` · ${count.tools}T` : ''}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>

@@ -1,0 +1,91 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostRow from '@/components/PostRow.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import ToolCard from '@/components/ToolCard.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import { getPosts, getProjects, getTools } from '@/lib/content';
+import { localePath } from '@/lib/url';
+
+interface Props {
+  tag: string;
+  lang: Lang;
+}
+const { tag, lang } = Astro.props;
+const t = useTranslations(lang);
+const [posts, projects, tools] = await Promise.all([getPosts(lang), getProjects(lang), getTools(lang)]);
+const tagPosts = posts.filter((post) => post.data.tags.includes(tag));
+const tagProjects = projects.filter((project) => project.data.tags.includes(tag));
+const tagTools = tools.filter((tool) => tool.data.tags.includes(tag));
+const total = tagPosts.length + tagProjects.length + tagTools.length;
+---
+<BaseLayout
+  lang={lang}
+  title={`#${tag}`}
+  description={`${t('tag.heading')}: ${tag}`}
+  path={`/tags/${tag}/`}
+  hasTranslation
+>
+  <div class="wrap">
+    <header class="masthead">
+      <div class="masthead__grid">
+        <div>
+          <p class="eyebrow">{t('tag.heading')}</p>
+          <h1 class="masthead__title">#{tag}</h1>
+          <p class="lede masthead__lede">{t('tags.lede')}</p>
+        </div>
+        <div class="masthead__aside">
+          <span class="masthead__count">{String(total).padStart(2, '0')}</span>
+          <span>{t('tags.title')}</span>
+        </div>
+      </div>
+    </header>
+
+    {total === 0 && <p class="lede">{t('tags.empty')}</p>}
+
+    {
+      tagPosts.length > 0 && (
+        <section class="section" style="padding-top:0">
+          <h2 class="col-title">{t('nav.blog')}</h2>
+          <ul class="post-list">
+            {tagPosts.map((post) => (
+              <PostRow post={post} lang={lang} />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      tagProjects.length > 0 && (
+        <section class="section" style="padding-top:0">
+          <h2 class="col-title">{t('nav.projects')}</h2>
+          <div class="grid grid-3">
+            {tagProjects.map((project) => (
+              <ProjectCard project={project} lang={lang} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      tagTools.length > 0 && (
+        <section class="section" style="padding-top:0">
+          <h2 class="col-title">{t('nav.tools')}</h2>
+          <div class="grid grid-3">
+            {tagTools.map((tool) => (
+              <ToolCard tool={tool} lang={lang} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <p style="padding-bottom:3rem">
+      <a class="btn btn--ghost btn--small" href={localePath(lang, '/tags/')}>
+        ← {t('tags.title')}
+      </a>
+    </p>
+  </div>
+</BaseLayout>

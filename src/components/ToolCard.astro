@@ -1,0 +1,41 @@
+---
+import TagList from '@/components/TagList.astro';
+import { localePath } from '@/lib/url';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import type { Tool } from '@/lib/content';
+
+interface Props {
+  tool: Tool;
+  lang: Lang;
+}
+const { tool, lang } = Astro.props;
+const t = useTranslations(lang);
+const d = tool.data;
+const href = localePath(lang, `/tools/${d.key}/`);
+const categoryLabel = t(`tools.category.${d.category}` as never);
+---
+<article class="card card--tool">
+  <div class="card__meta">
+    <span class={`status status--${d.status}`}>{t(`tools.status.${d.status}` as never)}</span>
+    <span>{categoryLabel}</span>
+  </div>
+  <h3 class="tool-name">
+    <a href={href}>{d.name}</a>{d.version && <span> {d.version}</span>}
+  </h3>
+  <p class="card__summary">{d.tagline}</p>
+  {d.tags && <TagList tags={d.tags} lang={lang} limit={3} />}
+  <div class="card__foot">
+    <span>{[d.language, d.license].filter(Boolean).join(' · ') || categoryLabel}</span>
+    {
+      d.repo ? (
+        <a class="link-arrow" href={d.repo} rel="external">
+          {t('common.viewOnGithub')}
+        </a>
+      ) : (
+        <a class="link-arrow" href={href}>
+          {t('common.readMore')}
+        </a>
+      )
+    }
+  </div>
+</article>

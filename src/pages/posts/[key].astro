@@ -1,0 +1,45 @@
+---
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+import { getPosts, getTranslationIndex, resolveRelated } from '@/lib/content';
+import type { Post, RelatedItem } from '@/lib/content';
+import { render } from 'astro:content';
+
+interface Props {
+  post: Post;
+  hasTranslation: boolean;
+  related: RelatedItem[];
+  prev?: Post;
+  next?: Post;
+}
+
+export async function getStaticPaths() {
+  const posts = await getPosts('en');
+  const index = await getTranslationIndex('posts');
+  return Promise.all(
+    posts.map(async (post, i) => ({
+      params: { key: post.data.key },
+      props: {
+        post,
+        hasTranslation: Boolean(index.get(post.data.key)?.zh),
+        related: await resolveRelated(post.data.related, 'en'),
+        prev: posts[i - 1],
+        next: posts[i + 1],
+      },
+    })),
+  );
+}
+
+const { post, hasTranslation, related, prev, next } = Astro.props as Props;
+const { Content, headings } = await render(post);
+---
+<ArticleLayout
+  post={post}
+  headings={headings}
+  lang="en"
+  hasTranslation={hasTranslation}
+  related={related}
+  prev={prev}
+  next={next}
+>
+  <Content />
+</ArticleLayout>

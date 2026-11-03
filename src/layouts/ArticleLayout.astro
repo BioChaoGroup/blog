@@ -1,0 +1,191 @@
+---
+/**
+ * Article layout — Distill-inspired: a narrow serif measure, a real byline,
+ * sticky table of contents, footnotes, a cite block and prev/next paging.
+ */
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Toc from '@/components/Toc.astro';
+import TagList from '@/components/TagList.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import { absoluteUrl, formatDate, localePath, readingTime, withBase } from '@/lib/url';
+import type { Post } from '@/lib/content';
+
+export interface RelatedItem {
+  kind: string;
+  title: string;
+  summary: string;
+  href: string;
+}
+
+interface Props {
+  post: Post;
+  headings: MarkdownHeading[];
+  lang: Lang;
+  hasTranslation: boolean;
+  related?: RelatedItem[];
+  prev?: Post;
+  next?: Post;
+}
+const { post, headings, lang, hasTranslation, related = [], prev, next } = Astro.props;
+const t = useTranslations(lang);
+const d = post.data;
+const minutes = readingTime(post.body, lang);
+const path = `/posts/${d.key}/`;
+const canonical = absoluteUrl(path);
+const cover = d.cover && /\.(png|jpe?g|webp|avif)$/i.test(d.cover) ? d.cover : undefined;
+const published = formatDate(d.date, lang);
+const updated = d.updated ? formatDate(d.updated, lang) : undefined;
+
+const authorList = d.authors.join(', ');
+const year = d.date.getUTCFullYear();
+const month = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'][
+  d.date.getUTCMonth()
+];
+const citeKey = `biochaogroup${year}${d.key.split('-')[0]}`;
+const citeText = `@misc{${citeKey},
+  title        = {${d.title}},
+  author       = {${d.authors.join(' and ')}},
+  year         = {${year}},
+  month        = {${month}},
+  howpublished = {BioChaoGroup lab notes},
+  url          = {${canonical}}
+}`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: d.title,
+    description: d.description,
+    abstract: d.lede ?? d.description,
+    datePublished: d.date.toISOString(),
+    dateModified: (d.updated ?? d.date).toISOString(),
+    author: d.authors.map((name) => ({ '@type': 'Person', name })),
+    publisher: { '@type': 'Organization', name: 'BioChaoGroup' },
+    keywords: d.tags.join(', '),
+    inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    url: canonical,
+    image: cover ? absoluteUrl(cover) : absoluteUrl('/og-default.png'),
+    wordCount: (post.body ?? '').split(/\s+/).length,
+    timeRequired: `PT${minutes}M`,
+  },
+];
+---
+<BaseLayout
+  lang={lang}
+  title={d.title}
+  description={d.description}
+  path={path}
+  type="article"
+  image={cover}
+  hasTranslation={hasTranslation}
+  publishedTime={d.date}
+  modifiedTime={d.updated}
+  tags={d.tags}
+  authors={d.authors}
+  jsonLd={jsonLd}
+>
+  <div class="wrap wrap--article">
+    <header class="article-head">
+      <p class="article-head__kicker">
+        <span class="pill">{t(`blog.kind.${d.kind}` as never)}</span>
+        <time datetime={d.date.toISOString()}>{published}</time>
+        <span aria-hidden="true">/</span>
+        <span>{minutes} {t('blog.minutes')}</span>
+        {updated && (
+          <>
+            <span aria-hidden="true">/</span>
+            <span>{t('blog.updated')} {updated}</span>
+          </>
+        )}
+      </p>
+
+      <h1 class="article-head__title">{d.title}</h1>
+      {d.lede && <p class="lede article-head__lede">{d.lede}</p>}
+
+      <div class="byline">
+        <span class="byline__authors">{authorList}</span>
+        <span class="byline__sep" aria-hidden="true"></span>
+        <span class="byline__meta">
+          {t('blog.published')} <time datetime={d.date.toISOString()}>{published}</time>
+        </span>
+        <span class="byline__sep" aria-hidden="true"></span>
+        <span class="byline__meta">{minutes} {t('blog.minutes')}</span>
+        {updated && (
+          <>
+            <span class="byline__sep" aria-hidden="true"></span>
+            <span class="byline__meta">{t('blog.updated')} {updated}</span>
+          </>
+        )}
+      </div>
+    </header>
+
+    {
+      d.cover && (
+        <figure class="article-cover">
+          <img src={withBase(d.cover)} alt="" width="1200" height="675" />
+        </figure>
+      )
+    }
+
+    <div class="article-body">
+      <div class="prose">
+        <slot />
+      </div>
+      <Toc headings={headings} lang={lang} />
+    </div>
+
+    <div class="article-foot">
+      <div class="article-foot__row">
+        {d.tags.length > 0 && <TagList tags={d.tags} lang={lang} />}
+        <a class="btn btn--ghost btn--small" href={localePath(lang, '/posts/')}>← {t('blog.back')}</a>
+      </div>
+
+      <div>
+        <p class="col-title">{t('blog.cite')}</p>
+        <div class="cite-box no-copy">{citeText}</div>
+      </div>
+
+      {
+        related.length > 0 && (
+          <div>
+            <p class="col-title">{t('blog.related')}</p>
+            <div class="related-strip">
+              {related.map((item) => (
+                <a class="related-card" href={item.href}>
+                  <span>{item.kind}</span>
+                  <b>{item.title}</b>
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      {
+        (prev || next) && (
+          <nav class="pager" aria-label="Post navigation">
+            {prev ? (
+              <a href={localePath(lang, `/posts/${prev.data.key}/`)}>
+                <span>← {t('blog.prev')}</span>
+                <b>{prev.data.title}</b>
+              </a>
+            ) : (
+              <span />
+            )}
+            {next ? (
+              <a href={localePath(lang, `/posts/${next.data.key}/`)}>
+                <span>{t('blog.next')} →</span>
+                <b>{next.data.title}</b>
+              </a>
+            ) : (
+              <span />
+            )}
+          </nav>
+        )
+      }
+    </div>
+  </div>
+</BaseLayout>

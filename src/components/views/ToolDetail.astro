@@ -1,0 +1,127 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import TagList from '@/components/TagList.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import type { Tool, Post } from '@/lib/content';
+import { localePath } from '@/lib/url';
+
+interface Props {
+  tool: Tool;
+  lang: Lang;
+  hasTranslation: boolean;
+  relatedPosts: Post[];
+}
+const { tool, lang, hasTranslation, relatedPosts } = Astro.props;
+const t = useTranslations(lang);
+const d = tool.data;
+const path = `/tools/${d.key}/`;
+const meta = [
+  { label: t('tools.meta.category'), value: t(`tools.category.${d.category}` as never) },
+  { label: t('tools.meta.language'), value: d.language },
+  { label: t('tools.meta.license'), value: d.license },
+  { label: t('tools.meta.version'), value: d.version },
+].filter((item) => item.value);
+const links = [
+  ...(d.repo ? [{ label: t('common.viewOnGithub'), href: d.repo, external: true }] : []),
+  ...d.links.map((link) => ({ label: link.label, href: link.href, external: link.href.startsWith('http') })),
+];
+---
+<BaseLayout
+  lang={lang}
+  title={`${d.name} — ${t('tools.title')}`}
+  description={d.summary}
+  path={path}
+  hasTranslation={hasTranslation}
+  type="article"
+>
+  <div class="wrap">
+    <header class="detail-head">
+      <p class="detail-head__top">
+        <span class="pill">{t('nav.tools')}</span>
+        <span class={`status status--${d.status}`}>{t(`tools.status.${d.status}` as never)}</span>
+        <span>{t(`tools.category.${d.category}` as never)}</span>
+      </p>
+      <h1 class="detail-head__title mono-title">{d.name}</h1>
+      <p class="detail-head__summary">{d.tagline}</p>
+
+      <dl class="meta-table">
+        {meta.map((item) => (
+          <div>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </header>
+
+    <div class="detail-layout">
+      <div class="prose">
+        {d.install && (
+          <div class="code-block">
+            <p class="col-title">{t('tools.install')}</p>
+            <pre><code>{d.install}</code></pre>
+          </div>
+        )}
+        <slot />
+      </div>
+
+      <aside class="detail-aside">
+        {
+          links.length > 0 && (
+            <div class="aside-box">
+              <h2>{t('projects.links')}</h2>
+              <div class="aside-links">
+                {links.map((link) => (
+                  <a
+                    href={link.href}
+                    target={link.external ? '_blank' : undefined}
+                    rel={link.external ? 'noreferrer noopener' : undefined}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+        {d.package && (
+          <div class="aside-box">
+            <h2>{t('tools.install')}</h2>
+            <div class="cite-box">{d.package}</div>
+          </div>
+        )}
+        {
+          relatedPosts.length > 0 && (
+            <div class="aside-box">
+              <h2>{t('blog.related')}</h2>
+              <ul>
+                {relatedPosts.map((post) => (
+                  <li>
+                    <a href={localePath(lang, `/posts/${post.data.key}/`)}>{post.data.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+        {
+          d.tags && d.tags.length > 0 && (
+            <div class="aside-box">
+              <h2>{t('blog.tags')}</h2>
+              <TagList tags={d.tags} lang={lang} />
+            </div>
+          )
+        }
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .mono-title {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    font-size: var(--step-5);
+  }
+</style>

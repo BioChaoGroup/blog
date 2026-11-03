@@ -1,0 +1,647 @@
+/* ==========================================================================
+   Prose: long-form article typography (Distill-inspired, but in our palette).
+   Width 68–72 characters, serif body, generous leading, real footnotes.
+   ========================================================================== */
+
+.prose {
+  font-family: var(--font-serif);
+  font-size: clamp(1.06rem, 0.35vw + 1rem, 1.175rem);
+  line-height: 1.72;
+  color: var(--ink-2);
+  max-width: var(--measure);
+}
+
+:lang(zh) .prose {
+  line-height: 1.9;
+  font-size: clamp(1.05rem, 0.35vw + 0.98rem, 1.14rem);
+  letter-spacing: 0.005em;
+}
+
+.prose > * + * {
+  margin-top: 1.15em;
+}
+
+.prose h2 {
+  position: relative;
+  margin-top: 2.4em;
+  margin-bottom: 0.65em;
+  font-size: clamp(1.5rem, 1.1vw + 1.24rem, 1.85rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  scroll-margin-top: 6rem;
+}
+
+:lang(zh) .prose h2 {
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+
+.prose h3 {
+  margin-top: 1.9em;
+  margin-bottom: 0.5em;
+  font-family: var(--font-sans);
+  font-size: 1.02rem;
+  font-weight: 650;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+  scroll-margin-top: 6rem;
+}
+
+.prose h2 + *,
+.prose h3 + * {
+  margin-top: 0;
+}
+
+.prose p {
+  margin-top: 1.15em;
+}
+
+.prose strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.prose a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* heading anchors, injected by the client script */
+.prose .heading-anchor {
+  position: absolute;
+  left: -1.15em;
+  padding-right: 0.4em;
+  color: var(--ink-4);
+  text-decoration: none;
+  opacity: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  line-height: inherit;
+  transition: opacity var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.prose h2:hover .heading-anchor,
+.prose h3:hover .heading-anchor,
+.prose .heading-anchor:focus-visible {
+  opacity: 1;
+}
+
+@media (max-width: 78rem) {
+  .prose .heading-anchor {
+    display: none;
+  }
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.25em;
+}
+
+.prose li {
+  margin-top: 0.4em;
+  padding-left: 0.15em;
+}
+
+.prose li::marker {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin-top: 0.35em;
+}
+
+.prose blockquote {
+  margin: 1.6em 0;
+  padding: 0.15em 0 0.15em 1.25em;
+  border-left: 3px solid var(--accent-line);
+  color: var(--ink-2);
+  font-style: italic;
+}
+
+.prose blockquote p {
+  margin-top: 0.6em;
+}
+
+.prose blockquote p:first-child {
+  margin-top: 0;
+}
+
+/* ---------- inline code ---------- */
+
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.84em;
+  padding: 0.14em 0.36em;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--paper-3);
+  color: var(--ink);
+  word-break: break-word;
+}
+
+/* ---------- code blocks (Shiki dual theme) ---------- */
+
+.prose pre,
+.code-block pre {
+  position: relative;
+  margin: 1.6em 0;
+  padding: 2.1rem 1.05rem 1.05rem;
+  border: 1px solid var(--line-ink);
+  border-radius: var(--radius-sm);
+  background: #fdfcf9;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.83rem;
+  line-height: 1.62;
+  tab-size: 2;
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-theme='dark'] .prose pre,
+[data-theme='dark'] .code-block pre {
+  background: #0a0f0e;
+  border-color: #24312c;
+}
+
+.prose pre code,
+.code-block pre code {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  display: block;
+  width: max-content;
+  min-width: 100%;
+}
+
+.prose pre .line,
+.code-block pre .line {
+  display: inline-block;
+  width: 100%;
+}
+
+/* Shiki emits --shiki-light / --shiki-dark custom properties when two themes
+   are configured; switch on data-theme. */
+[data-theme='dark'] .astro-code,
+[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: transparent !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+.prose .code-block,
+.prose pre {
+  scrollbar-width: thin;
+}
+
+.prose pre::-webkit-scrollbar,
+.code-block pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.prose pre::-webkit-scrollbar-thumb,
+.code-block pre::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--ink-4) 40%, transparent);
+  border-radius: 4px;
+}
+
+.prose .copy-btn,
+.code-block .copy-btn {
+  background: var(--paper-3);
+}
+
+/* ---------- math ---------- */
+
+.prose .katex {
+  font-size: 1.04em;
+}
+
+.prose .katex-display {
+  margin: 1.5em 0;
+  padding: 0.35em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+:lang(zh) .prose .katex {
+  font-size: 1em;
+}
+
+/* ---------- tables ---------- */
+
+.prose table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 1.7em 0;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.prose thead th {
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1.5px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.prose tbody td {
+  padding: 0.6rem 0.7rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  color: var(--ink-2);
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.prose tbody tr:hover {
+  background: color-mix(in srgb, var(--paper-3) 60%, transparent);
+}
+
+/* ---------- figures ---------- */
+
+.prose figure {
+  margin: 2em 0;
+  padding: 0;
+}
+
+.prose figure img,
+.prose > p > img {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper-2);
+  width: 100%;
+}
+
+.prose figcaption {
+  margin-top: 0.7rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--ink-3);
+  padding-left: 0.1rem;
+  border-left: 2px solid var(--accent-line);
+  padding-left: 0.7rem;
+}
+
+/* ---------- footnotes ---------- */
+
+.prose .footnotes {
+  margin-top: 3em;
+  padding-top: 1.2em;
+  border-top: 1px solid var(--line);
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+.prose .footnotes h2 {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin: 0 0 0.6em;
+}
+
+.prose .footnotes ol {
+  padding-left: 1.2em;
+}
+
+.prose sup a {
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.7em;
+  padding: 0 0.1em;
+  color: var(--accent);
+}
+
+/* ---------- misc ---------- */
+
+.prose hr {
+  margin: 2.6em auto;
+  width: 4rem;
+  border: 0;
+  border-top: 2px solid var(--accent-line);
+}
+
+.prose > p:first-child {
+  font-size: 1.02em;
+}
+
+.prose del {
+  color: var(--ink-4);
+}
+
+/* ---------- article shell ---------- */
+
+.article-head {
+  padding-top: clamp(2.2rem, 5vw, 3.8rem);
+  padding-bottom: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+.article-head__kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 1.15rem;
+}
+
+.article-head__title {
+  max-width: 30ch;
+  margin-bottom: 1rem;
+  font-size: clamp(2.15rem, 2.6vw + 1.2rem, 3.15rem);
+  line-height: 1.06;
+}
+
+.article-head__lede {
+  max-width: 44ch;
+  font-size: var(--step-1);
+  color: var(--ink-2);
+}
+
+.byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  margin-top: 1.6rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  font-size: var(--step--1);
+  color: var(--ink-3);
+}
+
+.byline__authors {
+  color: var(--ink-2);
+  font-weight: 550;
+}
+
+.byline__sep {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--ink-4);
+}
+
+.byline__meta {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--ink-4);
+}
+
+.article-cover {
+  margin: clamp(1.6rem, 3vw, 2.4rem) auto 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--paper-2);
+}
+
+.article-cover img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.wrap--article {
+  width: min(100% - 2 * var(--gutter), 1080px);
+}
+
+.article-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 14rem);
+  gap: clamp(1.6rem, 3vw, 3rem);
+  align-items: start;
+  padding-block: clamp(1.8rem, 3.4vw, 2.8rem) clamp(2.4rem, 5vw, 4rem);
+}
+
+@media (max-width: 68rem) {
+  .article-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.toc {
+  position: sticky;
+  top: 5.6rem;
+  border-left: 1px solid var(--line);
+  padding-left: 1.1rem;
+  max-height: calc(100vh - 8rem);
+  overflow: auto;
+  scrollbar-width: thin;
+}
+
+.toc__title {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 0.7rem;
+}
+
+.toc ol {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.toc li.toc__h3 {
+  padding-left: 0.85rem;
+}
+
+.toc a {
+  color: var(--ink-3);
+  text-decoration: none;
+}
+
+.toc a:hover,
+.toc a.is-active {
+  color: var(--accent);
+}
+
+.toc a.is-active {
+  font-weight: 550;
+}
+
+@media (max-width: 68rem) {
+  .toc {
+    position: static;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding: 1rem 0 0;
+    max-height: none;
+    order: -1;
+  }
+
+  .toc ol {
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  }
+}
+
+.article-foot {
+  border-top: 1px solid var(--line);
+  padding-top: clamp(1.4rem, 3vw, 2rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.4rem;
+}
+
+.article-foot > * {
+  min-width: 0;
+}
+
+.article-foot__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 1.4rem;
+  justify-content: space-between;
+}
+
+.cite-box {
+  position: relative;
+  border: 1px dashed var(--line-2, var(--line));
+  border-radius: var(--radius-sm);
+  background: var(--paper-3);
+  padding: 1rem 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  line-height: 1.65;
+  color: var(--ink-3);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-x: auto;
+}
+
+.pager {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.pager a {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper-2);
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.pager a:hover {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+}
+
+.pager span {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.pager b {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: var(--step--1);
+  line-height: 1.35;
+}
+
+.pager a:last-child {
+  text-align: right;
+}
+
+@media (max-width: 40rem) {
+  .pager {
+    grid-template-columns: 1fr;
+  }
+
+  .pager a:last-child {
+    text-align: left;
+  }
+}
+
+/* related cards strip */
+.related-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.8rem;
+}
+
+.related-strip > * {
+  min-width: 0;
+}
+
+.related-card {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.95rem 1.05rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper-2);
+  text-decoration: none;
+}
+
+.related-card:hover {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+}
+
+.related-card span {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.related-card b {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: var(--step--1);
+  color: var(--ink);
+  line-height: 1.35;
+}
