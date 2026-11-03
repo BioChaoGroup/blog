@@ -486,35 +486,11 @@ a.tag:hover {
   flex: none;
 }
 
-.brand__mark {
-  width: 2.1rem;
-  height: 2.1rem;
+.brand__logo {
+  display: block;
+  width: 16.5rem;
+  height: auto;
   flex: none;
-  border-radius: 0;
-  overflow: visible;
-}
-
-.brand__text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.05;
-}
-
-.brand__name {
-  font-family: var(--font-serif);
-  font-size: 1.06rem;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-}
-
-.brand__sub {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.17em;
-  text-transform: uppercase;
-  color: var(--ink-4);
-  margin-top: 0.16rem;
 }
 
 .site-nav {
@@ -678,8 +654,17 @@ a.tag:hover {
 }
 
 @media (max-width: 26rem) {
-  .brand__sub {
-    display: none;
+  .site-header .brand__logo {
+    width: clamp(8rem, calc(100vw - 13.5rem), 11.5rem);
+  }
+
+  .site-tools {
+    gap: 0.3rem;
+  }
+
+  .lang-switch a,
+  .lang-switch span {
+    padding-inline: 0.4rem;
   }
 }
 

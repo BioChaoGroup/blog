@@ -27,11 +27,7 @@ const otherLang = lang === 'en' ? 'zh' : 'en';
 <header class="site-header">
   <div class="wrap site-header__inner">
     <a class="brand" href={localePath(lang, '/')} aria-label={t('site.name')}>
-      <Logo />
-      <span class="brand__text">
-        <span class="brand__name">BioChaoGroup</span>
-        <span class="brand__sub">{t('site.tagline')}</span>
-      </span>
+      <Logo id="header" />
     </a>
 
     <nav class="site-nav" id="site-nav" aria-label={t('nav.menu')}>

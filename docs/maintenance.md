@@ -271,24 +271,31 @@ if anything drops below 4.5:1. The cyan and teal tokens are for graphics
 on white.
 
 
-## 6. The "BC" monogram
+## 6. The fungal logo
 
-`src/components/Logo.astro` and `public/favicon.svg` contain the Source Serif 4
-outlines for "B" and "C" (weight 700, slightly negative kerning) as SVG paths.
-Baking the glyphs keeps the mark identical in favicons (where webfonts cannot be
-loaded), in the Open Graph card and in print, without shipping a font.
+The approved mark is branched, septate fungal hyphae beside the serif
+**BioChaoGroup** wordmark and **AI × BI × SCI** slogan. Its transparent imagegen
+source is `public/brand/fungal-lockup-source.png`. Preserve its silhouette,
+lettering and proportions when changing colours.
 
-To regenerate the vector part after changing the wordmark, weight or tile
-colour:
+`src/components/Logo.astro` uses the source's alpha channel as an SVG mask.
+The hyphae use `--brand` (华大青, `#00b1d7`); the name uses `--ink`; the slogan
+uses the more legible `--accent`. Theme changes therefore use the existing
+site tokens, without a white background or inverted cyan.
+
+Header and footer pass different mask IDs to avoid duplicate SVG identifiers.
+The complete slogan stays visible on mobile. Standalone exports are available
+under `public/brand/` as transparent PNG and self-contained light/dark SVG
+containers; the SVGs embed the raster alpha source and are not path-only vectors.
+
+To regenerate the standalone logo, favicon, app icons and Open Graph card:
 
 ```sh
-python3 -m pip install --target /tmp/pylibs fonttools brotli
-PYTHONPATH=/tmp/pylibs python3 scripts/make-monogram.py
+node scripts/render-brand.mjs
+pnpm build
 ```
 
-The script rewrites both files. The raster assets that reuse the mark
-(`public/og-default.png`, `public/icon-512.png`, `public/apple-touch-icon.png`)
-are rendered from `/tmp/og.html` and `/tmp/icon.html` with headless Chrome; the
-templates are documented in the script header and in §1 of this file. After any
-regeneration run `pnpm build` and check the header in both themes
-(`SHOT_THEME=dark pnpm shots --only home`).
+The renderer uses Sharp bundled with Astro. It reads the light-theme colours
+from `src/styles/tokens.css`; keep its dark-export colours in sync if those
+tokens change. Check the header/footer in both themes and at mobile widths
+after a brand update. The previous BC monogram recipe has been retired.
