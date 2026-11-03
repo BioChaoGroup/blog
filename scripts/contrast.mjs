@@ -55,7 +55,9 @@ const pairs = [
   ['light link on card', 'accent', 'paper-2', 4.5],
   ['light draft/warn text', 'warm', 'paper', 4.5],
   ['light info text', 'info', 'paper-2', 4.5],
-  ['light button label', 'paper-2', 'accent', 4.5],
+  ['light display heading', 'accent-display', 'paper', 3.0],
+  ['light button label', 'accent-contrast', 'brand', 4.5],
+  ['light body on brand block', 'accent-contrast', 'brand', 4.5],
   ['light tag text', 'ink-3', 'paper-3', 4.5],
 
   ['dark body text', 'ink', 'paper', 4.5],
@@ -67,7 +69,8 @@ const pairs = [
   ['dark link on card', 'accent', 'paper-2', 4.5],
   ['dark draft/warn text', 'warm', 'paper', 4.5],
   ['dark cyan highlight', 'accent-bright', 'paper', 4.5],
-  ['dark button label', 'accent-contrast', 'accent', 4.5],
+  ['dark display heading', 'accent-display', 'paper', 3.0],
+  ['dark button label', 'accent-contrast', 'brand', 4.5],
   ['dark tag text', 'ink-3', 'paper-3', 4.5],
 ];
 

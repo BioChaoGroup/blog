@@ -254,9 +254,12 @@ For anything URL- or Pages-related (base path, custom domain, rollback), see
 
 ## 5. Colour contrast
 
-The palette is anchored on BGI's brand blue (`#2b57b8` deep, `#0166b3` blue,
-`#12b3ea` cyan, `#00bda5` teal). Text colours must stay WCAG AA compliant in both
-themes, so before changing a token run:
+The palette is anchored on BGI Research's brand cyan (华大青, `#00b1d7`, sampled
+from the institute's title slide). The pure cyan is a surface colour — white on it
+is only 2.5:1 — so text uses same-hue darker shades: `#00758f` for links and small
+labels, `#0098bc` for large display type, and `#00232e` for text on cyan blocks.
+Text colours must stay WCAG AA compliant in both themes, so before changing a
+token run:
 
 ```sh
 pnpm check:contrast

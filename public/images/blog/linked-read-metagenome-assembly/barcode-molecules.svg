@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" width="1200" height="760" role="img" aria-label="A long molecule is fragmented and amplified; its short reads inherit one barcode, so barcode sharing is evidence of physical linkage along a molecule whose length is known.">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0 0L10 5L0 10z" fill="#4a5b70"/>
+      <path d="M0 0L10 5L0 10z" fill="#3d5b66"/>
     </marker>
   </defs>
 
-  <rect width="1200" height="760" fill="#f5f7fa"/>
+  <rect width="1200" height="760" fill="#f4f9fb"/>
 
   <!-- panel titles -->
-  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" fill="#3d4f64" letter-spacing="1.4">
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" fill="#2c4753" letter-spacing="1.4">
     <text x="60" y="58">1 · LONG DNA MOLECULE (40–60 KB)</text>
     <text x="60" y="228">2 · FRAGMENT, AMPLIFY, TAG — ONE BARCODE PER MOLECULE</text>
     <text x="60" y="452">3 · SHORT READS INHERIT THAT BARCODE</text>
@@ -17,29 +17,29 @@
 
   <!-- panel 1 -->
   <g>
-    <rect x="60" y="82" width="1080" height="58" rx="29" fill="#e7edf9" stroke="#c2d0ec"/>
-    <rect x="74" y="96" width="1052" height="30" rx="15" fill="#2b57b8" opacity="0.15"/>
-    <g stroke="#2b57b8" stroke-opacity="0.3" stroke-width="1.4">
+    <rect x="60" y="82" width="1080" height="58" rx="29" fill="#dff4fa" stroke="#aedfec"/>
+    <rect x="74" y="96" width="1052" height="30" rx="15" fill="#00758f" opacity="0.15"/>
+    <g stroke="#00758f" stroke-opacity="0.3" stroke-width="1.4">
       <path d="M180 82v58M420 82v58M660 82v58M900 82v58"/>
     </g>
-    <text x="60" y="176" font-family="ui-monospace, Menlo, monospace" font-size="18" fill="#4a5b70">5′</text>
-    <text x="1140" y="176" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="18" fill="#4a5b70">3′</text>
-    <path d="M600 186v22" stroke="#4a5b70" stroke-width="2.4" marker-end="url(#arrow)"/>
+    <text x="60" y="176" font-family="ui-monospace, Menlo, monospace" font-size="18" fill="#3d5b66">5′</text>
+    <text x="1140" y="176" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="18" fill="#3d5b66">3′</text>
+    <path d="M600 186v22" stroke="#3d5b66" stroke-width="2.4" marker-end="url(#arrow)"/>
   </g>
 
   <!-- panel 2 -->
   <g>
     <g>
-      <rect x="80" y="256" width="148" height="20" rx="10" fill="#2b57b8" opacity="0.78"/>
-      <rect x="248" y="256" width="94" height="20" rx="10" fill="#2b57b8" opacity="0.78"/>
-      <rect x="362" y="256" width="130" height="20" rx="10" fill="#2b57b8" opacity="0.78"/>
-      <rect x="512" y="256" width="76" height="20" rx="10" fill="#2b57b8" opacity="0.78"/>
-      <rect x="608" y="256" width="142" height="20" rx="10" fill="#2b57b8" opacity="0.78"/>
-      <rect x="770" y="256" width="102" height="20" rx="10" fill="#2b57b8" opacity="0.78"/>
-      <rect x="892" y="256" width="118" height="20" rx="10" fill="#2b57b8" opacity="0.78"/>
-      <rect x="1030" y="256" width="64" height="20" rx="10" fill="#2b57b8" opacity="0.78"/>
+      <rect x="80" y="256" width="148" height="20" rx="10" fill="#00758f" opacity="0.78"/>
+      <rect x="248" y="256" width="94" height="20" rx="10" fill="#00758f" opacity="0.78"/>
+      <rect x="362" y="256" width="130" height="20" rx="10" fill="#00758f" opacity="0.78"/>
+      <rect x="512" y="256" width="76" height="20" rx="10" fill="#00758f" opacity="0.78"/>
+      <rect x="608" y="256" width="142" height="20" rx="10" fill="#00758f" opacity="0.78"/>
+      <rect x="770" y="256" width="102" height="20" rx="10" fill="#00758f" opacity="0.78"/>
+      <rect x="892" y="256" width="118" height="20" rx="10" fill="#00758f" opacity="0.78"/>
+      <rect x="1030" y="256" width="64" height="20" rx="10" fill="#00758f" opacity="0.78"/>
     </g>
-    <g font-family="ui-monospace, Menlo, monospace" font-size="17" fill="#2b57b8" letter-spacing="0.6">
+    <g font-family="ui-monospace, Menlo, monospace" font-size="17" fill="#00758f" letter-spacing="0.6">
       <text x="92" y="312">BC-4182</text>
       <text x="256" y="312">BC-4182</text>
       <text x="370" y="312">BC-4182</text>
@@ -49,16 +49,16 @@
       <text x="900" y="312">BC-4182</text>
       <text x="1038" y="312">BC-4182</text>
     </g>
-    <text x="60" y="366" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" fill="#4a5b70">eight fragments, one barcode: amplification duplicates stay recognisably together</text>
+    <text x="60" y="366" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" fill="#3d5b66">eight fragments, one barcode: amplification duplicates stay recognisably together</text>
   </g>
 
   <!-- panel 3 -->
   <g>
-    <g stroke="#c9d3e0" stroke-width="1.4">
+    <g stroke="#c3dbe3" stroke-width="1.4">
       <path d="M80 540h1080"/>
       <path d="M140 528v22M340 528v22M540 528v22M740 528v22M940 528v22M1140 528v22"/>
     </g>
-    <g font-family="ui-monospace, Menlo, monospace" font-size="17" fill="#6b7d93">
+    <g font-family="ui-monospace, Menlo, monospace" font-size="17" fill="#5e7a86">
       <text x="140" y="580" text-anchor="middle">10 kb</text>
       <text x="340" y="580" text-anchor="middle">20 kb</text>
       <text x="540" y="580" text-anchor="middle">30 kb</text>
@@ -66,7 +66,7 @@
       <text x="940" y="580" text-anchor="middle">50 kb</text>
       <text x="1140" y="580" text-anchor="middle">60 kb</text>
     </g>
-    <g fill="#2b57b8" opacity="0.88">
+    <g fill="#00758f" opacity="0.88">
       <rect x="120" y="494" width="36" height="11" rx="5"/>
       <rect x="238" y="494" width="30" height="11" rx="5" opacity="0.7"/>
       <rect x="430" y="494" width="38" height="11" rx="5"/>
@@ -74,26 +74,26 @@
       <rect x="870" y="494" width="36" height="11" rx="5"/>
       <rect x="1060" y="494" width="30" height="11" rx="5" opacity="0.7"/>
     </g>
-    <path d="M138 478C360 428 800 428 1078 478" fill="none" stroke="#2b57b8" stroke-width="2" stroke-dasharray="7 8" opacity="0.6"/>
-    <text x="600" y="416" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" fill="#2b57b8">one molecule spans all of them → they belong together in the assembly</text>
+    <path d="M138 478C360 428 800 428 1078 478" fill="none" stroke="#00758f" stroke-width="2" stroke-dasharray="7 8" opacity="0.6"/>
+    <text x="600" y="416" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" fill="#00758f">one molecule spans all of them → they belong together in the assembly</text>
   </g>
 
   <!-- panel 4 -->
   <g transform="translate(60 656)">
     <g>
       <rect x="0" y="0" width="238" height="58" rx="12" fill="#ffffff" stroke="#ddd8cd"/>
-      <rect x="16" y="16" width="58" height="11" rx="5" fill="#2b57b8" opacity="0.78"/>
-      <rect x="16" y="33" width="40" height="11" rx="5" fill="#2b57b8" opacity="0.45"/>
-      <text x="92" y="36" font-family="ui-monospace, Menlo, monospace" font-size="17" fill="#26344a">contig A</text>
+      <rect x="16" y="16" width="58" height="11" rx="5" fill="#00758f" opacity="0.78"/>
+      <rect x="16" y="33" width="40" height="11" rx="5" fill="#00758f" opacity="0.45"/>
+      <text x="92" y="36" font-family="ui-monospace, Menlo, monospace" font-size="17" fill="#16323d">contig A</text>
     </g>
-    <path d="M262 29h62" stroke="#4a5b70" stroke-width="2.4" marker-end="url(#arrow)"/>
+    <path d="M262 29h62" stroke="#3d5b66" stroke-width="2.4" marker-end="url(#arrow)"/>
     <g transform="translate(348 0)">
       <rect x="0" y="0" width="238" height="58" rx="12" fill="#ffffff" stroke="#ddd8cd"/>
       <rect x="16" y="16" width="48" height="11" rx="5" fill="#8a5316" opacity="0.72"/>
       <rect x="16" y="33" width="64" height="11" rx="5" fill="#8a5316" opacity="0.4"/>
-      <text x="92" y="36" font-family="ui-monospace, Menlo, monospace" font-size="17" fill="#26344a">contig B</text>
+      <text x="92" y="36" font-family="ui-monospace, Menlo, monospace" font-size="17" fill="#16323d">contig B</text>
     </g>
-    <text x="620" y="26" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" fill="#4a5b70">same barcode (BC-4182) on both contigs →</text>
-    <text x="620" y="52" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" fill="#2b57b8">scaffold them, or model it as a collision</text>
+    <text x="620" y="26" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" fill="#3d5b66">same barcode (BC-4182) on both contigs →</text>
+    <text x="620" y="52" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" fill="#00758f">scaffold them, or model it as a collision</text>
   </g>
 </svg>

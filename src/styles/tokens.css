@@ -1,47 +1,60 @@
 /* ==========================================================================
    Design tokens — BioChaoGroup
-   Palette anchored on BGI's brand blue ("华大蓝"), taken from the official
-   site:  #2B57B8 (deep blue) · #0166B3 (blue) · #12B3EA (cyan)
-          #39CDFF (light cyan) · #00BDA5 (teal) · #213046 (navy text)
+   Palette anchored on BGI Research's brand cyan (华大青), sampled from the
+   institute's title slide:  #00B1D7.
 
-   Light mode is a cool paper with navy ink; dark mode is a deep blue-black.
-   Every text/background pair in this file is checked for WCAG AA contrast
-   (see docs/maintenance.md §5 for the audit command).
+   The pure cyan is a surface/graphic colour (contrast on white is only 2.5:1),
+   so text uses a same-hue darker shade and large display type uses the mid
+   shade:
+       brand            #00B1D7   tiles, tracks, blocks, buttons, OG card
+       accent           #00758F   body links, small labels   (AA on paper)
+       accent-2         #00657C   hover                      (AA on paper)
+       accent-display   #0098BC   hero/display headings      (large-text tier)
+       tint             #DFF4FA   soft fills
+       ink              #0A2530   body text, deep teal-navy
+
+   Every text/background pair is audited by `pnpm check:contrast`.
    ========================================================================== */
 
 :root {
   color-scheme: light;
 
   /* surfaces */
-  --paper: #f5f7fa;
+  --paper: #f4f9fb;
   --paper-2: #ffffff;
-  --paper-3: #edf1f7;
-  --paper-inset: #e5ebf3;
+  --paper-3: #eaf4f8;
+  --paper-inset: #dfeff5;
 
   /* ink */
-  --ink: #101b2d;
-  --ink-2: #33445c;
-  --ink-3: #526379;
-  --ink-4: #5e6f84;
+  --ink: #0a2530;
+  --ink-2: #2c4753;
+  --ink-3: #4e6a76;
+  --ink-4: #55707c;
 
   /* lines */
-  --line: #d6dee9;
-  --line-2: #c2ccdd;
-  --line-soft: #e6ecf4;
-  --line-ink: #26344a;
+  --line: #d3e4ea;
+  --line-2: #bcd6de;
+  --line-soft: #e4f0f4;
+  --line-ink: #16323d;
 
-  /* accent — brand blue */
-  --accent: #2b57b8;
-  --accent-2: #0166b3;
-  --accent-ink: #1b3a7e;
-  --accent-soft: #e7edf9;
-  --accent-line: #c2d0ec;
-  --accent-contrast: #ffffff;
+  /* brand cyan — surfaces and graphics */
+  --brand: #00b1d7;
+  --brand-soft: #dff4fa;
+  --brand-line: #aedfec;
 
-  /* brand cyan / teal — graphics and accents, not body text */
-  --accent-bright: #12b3ea;
-  --accent-bright-soft: #e3f6fd;
-  --teal: #00bda5;
+  /* text accent — same hue, readable */
+  --accent: #00758f;
+  --accent-2: #00657c;
+  --accent-ink: #004b5c;
+  --accent-soft: #dff4fa;
+  --accent-line: #aedfec;
+  --accent-contrast: #00232e;
+  --accent-display: #0098bc;
+
+  /* secondary graphics */
+  --accent-bright: #00b1d7;
+  --accent-bright-soft: #e3f7fc;
+  --teal: #00a88f;
 
   /* warm highlight (drafts, experimental states) */
   --warm: #8a5316;
@@ -53,8 +66,8 @@
   --ok-soft: #dcebe2;
   --warn: #8a5316;
   --warn-soft: #f6eadb;
-  --info: #0166b3;
-  --info-soft: #dfeaf7;
+  --info: #00657c;
+  --info-soft: #dff4fa;
 
   /* type */
   --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system,
@@ -86,10 +99,10 @@
   --radius-lg: 24px;
 
   /* depth */
-  --shadow-xs: 0 1px 2px rgb(16 27 45 / 0.06);
-  --shadow-sm: 0 1px 2px rgb(16 27 45 / 0.06), 0 4px 12px -6px rgb(16 27 45 / 0.14);
-  --shadow-md: 0 2px 4px rgb(16 27 45 / 0.05), 0 18px 40px -24px rgb(16 27 45 / 0.3);
-  --shadow-lg: 0 24px 80px -40px rgb(16 27 45 / 0.5);
+  --shadow-xs: 0 1px 2px rgb(10 37 48 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(10 37 48 / 0.06), 0 4px 12px -6px rgb(10 37 48 / 0.14);
+  --shadow-md: 0 2px 4px rgb(10 37 48 / 0.05), 0 18px 40px -24px rgb(10 37 48 / 0.3);
+  --shadow-lg: 0 24px 80px -40px rgb(10 37 48 / 0.5);
 
   /* motion */
   --ease: cubic-bezier(0.2, 0.7, 0.25, 1);
@@ -99,30 +112,35 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  --paper: #070f18;
-  --paper-2: #0c1826;
-  --paper-3: #091320;
-  --paper-inset: #122234;
+  --paper: #061a22;
+  --paper-2: #0a2530;
+  --paper-3: #081f28;
+  --paper-inset: #103440;
 
-  --ink: #e8eff7;
-  --ink-2: #c3d0de;
-  --ink-3: #93a6b6;
-  --ink-4: #6f8494;
+  --ink: #e6f4f8;
+  --ink-2: #c0d6de;
+  --ink-3: #8faab5;
+  --ink-4: #6f8b96;
 
-  --line: #1d2c3e;
-  --line-2: #29405a;
-  --line-soft: #142434;
-  --line-ink: #cfe0ec;
+  --line: #16323d;
+  --line-2: #1f4a58;
+  --line-soft: #102832;
+  --line-ink: #cfeef6;
 
-  --accent: #7ab0ff;
-  --accent-2: #9cc4ff;
-  --accent-ink: #cfe3ff;
-  --accent-soft: #102a44;
-  --accent-line: #1f4666;
-  --accent-contrast: #06110d;
+  --brand: #00b1d7;
+  --brand-soft: #0b2e3a;
+  --brand-line: #1a4a58;
 
-  --accent-bright: #39cdff;
-  --accent-bright-soft: #0d2b3d;
+  --accent: #5ad8f0;
+  --accent-2: #7de3f8;
+  --accent-ink: #c9f2fb;
+  --accent-soft: #0b2e3a;
+  --accent-line: #1a4a58;
+  --accent-contrast: #04161d;
+  --accent-display: #5ad8f0;
+
+  --accent-bright: #4fe0fa;
+  --accent-bright-soft: #0d3341;
   --teal: #5fe0cb;
 
   --warm: #e0a35f;
@@ -133,8 +151,8 @@
   --ok-soft: #14291d;
   --warn: #e0a35f;
   --warn-soft: #33241a;
-  --info: #39cdff;
-  --info-soft: #10283a;
+  --info: #5ad8f0;
+  --info-soft: #0d3341;
 
   --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.45);
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.45), 0 6px 18px -10px rgb(0 0 0 / 0.65);
