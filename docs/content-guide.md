@@ -123,6 +123,31 @@ links:
 - **Footnotes**: standard `[^1]` syntax is supported.
 - **Emphasis**: bold for key terms, italics for emphasis. No ALL CAPS headings.
 
+## 3.5 Unpublished work stays hidden (`draft: true`)
+
+This site is public. Anything that is not yet public — a private repository, a paper
+under review, an analysis that has not been written up — **must** be marked:
+
+```yaml
+draft: true
+```
+
+What that does:
+
+- the entry is **absent from production builds**: no page, no listing, no tag page,
+  no RSS item, no sitemap entry, no language-switch link;
+- it stays in the repository (and in `astro dev` with an "unpublished"/"未公开"
+  badge) so the work can be finished, reviewed and published later;
+- deleting a draft is not necessary — remove the flag when the work becomes public.
+
+When work is published: drop `draft: true`, add the DOI/paper link, and make sure no
+other page links to a key that is still a draft. `pnpm check:links` catches dangling
+internal links after a build, and `pnpm check:content` prints how many drafts are
+hidden.
+
+Projects that are private or unpublished should *not* be described on the public
+pages at all, even at a high level: the entry is a draft, so nothing ships.
+
 ## 4. Writing standards
 
 Good lab writing here means: concrete, honest, and useful to someone with the same

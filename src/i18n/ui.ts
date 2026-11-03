@@ -76,7 +76,7 @@ export const ui = {
     'projects.repo': 'Repository',
     'projects.readMore': 'Project notes',
     'projects.meta.status': 'Status',
-    'projects.internal': 'internal',
+    'projects.draft': 'unpublished',
     'projects.meta.year': 'Year',
 
     'tools.title': 'Tools',
@@ -237,7 +237,7 @@ export const ui = {
     'projects.repo': '代码仓库',
     'projects.readMore': '项目笔记',
     'projects.meta.status': '状态',
-    'projects.internal': '内部',
+    'projects.draft': '未公开',
     'projects.meta.year': '年份',
 
     'tools.title': '工具',

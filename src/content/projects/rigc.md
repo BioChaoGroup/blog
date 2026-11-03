@@ -9,6 +9,7 @@ period: '2024—'
 tags: ['genomics', 'infrastructure', 'workflow']
 members: ['Fang Chao']
 order: 70
+draft: true
 ---
 
 ## What it is

@@ -13,6 +13,7 @@ links:
   - label: 'Code and data requests'
     href: 'mailto:fangchao@genomics.cn'
     kind: data
+draft: true
 ---
 
 ## Why a pangenome

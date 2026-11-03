@@ -18,7 +18,7 @@ const href = localePath(lang, `/projects/${d.key}/`);
   <div class="card__meta">
     <StatusBadge status={d.status} kind="project" lang={lang} />
     <span>{d.year}</span>
-    {!d.repo && <span class="badge-new">{t('projects.internal')}</span>}
+    {d.draft && <span class="badge-new">{t('projects.draft')}</span>}
   </div>
   <h3 class="card__title"><a href={href}>{d.title}</a></h3>
   <p class="card__summary">{d.summary}</p>

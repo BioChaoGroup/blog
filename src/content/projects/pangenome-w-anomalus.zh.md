@@ -13,6 +13,7 @@ links:
   - label: '代码与数据索取'
     href: 'mailto:fangchao@genomics.cn'
     kind: data
+draft: true
 ---
 
 ## 为什么要做泛基因组

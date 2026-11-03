@@ -84,6 +84,7 @@ function walk(dir) {
 }
 
 const seen = new Map(); // `${collection}:${lang}:${key}` -> file
+const drafts = new Map(); // collection -> count of keys marked draft: true
 
 for (const [collection, rules] of Object.entries(COLLECTIONS)) {
   const dir = join(CONTENT, collection);
@@ -121,6 +122,9 @@ for (const [collection, rules] of Object.entries(COLLECTIONS)) {
     }
     if (lang === 'en' && /\.zh$/.test(rel.replace(/\.(md|mdx)$/, ''))) {
       errors.push(`${rel}: English entry must be named <key>.md (no .zh)`);
+    }
+    if (String(data.draft).toLowerCase() === 'true') {
+      drafts.set(`${collection}:${data.key}`, true);
     }
     if (data.key && lang) {
       const id = `${collection}:${lang}:${data.key}`;
@@ -172,7 +176,9 @@ for (const [id, bucket] of keys) {
 const counts = {};
 for (const [collection] of Object.entries(COLLECTIONS)) {
   const pairs = [...keys.keys()].filter((id) => id.startsWith(`${collection}:`)).length;
-  counts[collection] = pairs;
+  const draftPairs = [...drafts.keys()].filter((id) => id.startsWith(`${collection}:`)).length;
+  counts[collection] = pairs - draftPairs;
+  counts[`${collection}Drafts`] = draftPairs;
 }
 
 if (warnings.length) {
@@ -187,6 +193,9 @@ if (errors.length) {
   process.exit(1);
 }
 
+const draftNote = (n) => (n > 0 ? ` (+${n} drafts hidden from production)` : '');
 console.log(
-  `\nContent check passed: ${counts.projects} projects, ${counts.tools} tools, ${counts.blog} posts (each in en + zh).`,
+  `\nContent check passed: ${counts.projects} projects${draftNote(counts.projectsDrafts)}, ` +
+    `${counts.tools} tools${draftNote(counts.toolsDrafts)}, ` +
+    `${counts.blog} posts${draftNote(counts.blogDrafts)} — each in en + zh.`,
 );

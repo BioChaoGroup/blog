@@ -29,7 +29,8 @@ with the base path (`/blog`), so `/projects/stclfr/` is served at
 <https://biochaogroup.github.io/blog/projects/stclfr/>. `pnpm check:content`
 fails the build when a key is missing in either language, is duplicated, or
 disagrees with its filename — so the site can never ship a half-translated pair.
-Chinese pages are written, not machine-translated.
+Chinese pages are written, not machine-translated. Unpublished or private work is
+kept as `draft: true` and never appears in a production build.
 
 Interface chrome (navigation, buttons, home-page copy) is separate from content
 and lives in `src/i18n/ui.ts`. The full frontmatter reference is in

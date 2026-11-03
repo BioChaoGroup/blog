@@ -8,7 +8,7 @@ date: 2026-03-10
 authors: ['Fang Chao']
 tags: ['pangenome', 'assembly', 'workflow', 'methods']
 kind: article
-related: ['pangenome-w-anomalus', 'lab-infrastructure']
+related: ['lab-infrastructure']
 ---
 
 模式生物的泛基因组（pangenome）有现成的参考、现成的注释、现成的样本清单。非模式生物什么都没有：参考基因组可能只是一个草图，样本之间的分化程度未知，注释来自一个近缘物种的自动迁移。在这种条件下构图，最容易犯的错误是把"图建出来了"当成目标。
@@ -112,4 +112,4 @@ vg surject -x graph.gbz sample.gam > sample.surjected.gam
 4. **参考偏倚。** 以某个参考为骨架时，其他样本的变异表示方式受参考影响；rGFA 的 rank 和路径命名要保留好，否则下游无法区分"参考"与"样本"。
 5. **把图当终点。** 图是索引，不是结论。建完图之后仍然要做分型、关联或比较分析，否则只是换了一种格式存序列。
 
-最后一句实话：非模式生物的泛基因组，大部分工作量在构图之前和之后，而不是构图本身。组装 QC 和分型验证做扎实，minigraph 级别的图就能支撑很多问题；反过来，图再漂亮也救不了错误的输入。项目背景见 [泛基因组项目页](/zh/projects/pangenome-w-anomalus/)，基础设施层面的可复跑问题见[分析基础设施项目](/zh/projects/lab-infrastructure/)。
+最后一句实话：非模式生物的泛基因组，大部分工作量在构图之前和之后，而不是构图本身。组装 QC 和分型验证做扎实，minigraph 级别的图就能支撑很多问题；反过来，图再漂亮也救不了错误的输入。基础设施层面的可复跑问题见[分析基础设施项目](/zh/projects/lab-infrastructure/)。
