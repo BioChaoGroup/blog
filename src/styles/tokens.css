@@ -1,50 +1,60 @@
 /* ==========================================================================
    Design tokens — BioChaoGroup
-   A warm-paper academic palette with a teal accent (sequencing traces) and a
-   single amber highlight (warnings / "new"). Dark mode is a deep, slightly
-   green-tinted ink, not a pure black.
+   Palette anchored on BGI's brand blue ("华大蓝"), taken from the official
+   site:  #2B57B8 (deep blue) · #0166B3 (blue) · #12B3EA (cyan)
+          #39CDFF (light cyan) · #00BDA5 (teal) · #213046 (navy text)
+
+   Light mode is a cool paper with navy ink; dark mode is a deep blue-black.
+   Every text/background pair in this file is checked for WCAG AA contrast
+   (see docs/maintenance.md §5 for the audit command).
    ========================================================================== */
 
 :root {
   color-scheme: light;
 
   /* surfaces */
-  --paper: #f6f4ef;
-  --paper-2: #fffefa;
-  --paper-3: #efece5;
-  --paper-inset: #eae6dd;
+  --paper: #f5f7fa;
+  --paper-2: #ffffff;
+  --paper-3: #edf1f7;
+  --paper-inset: #e5ebf3;
 
   /* ink */
-  --ink: #131a1c;
-  --ink-2: #3b464a;
-  --ink-3: #66727a;
-  --ink-4: #8b959b;
+  --ink: #101b2d;
+  --ink-2: #33445c;
+  --ink-3: #526379;
+  --ink-4: #5e6f84;
 
   /* lines */
-  --line: #ddd8cd;
-  --line-2: #c3bdb1;
-  --line-soft: #e8e4da;
-  --line-ink: #2a3438;
+  --line: #d6dee9;
+  --line-2: #c2ccdd;
+  --line-soft: #e6ecf4;
+  --line-ink: #26344a;
 
-  /* accent — teal, the colour of a base-call trace */
-  --accent: #0b6b57;
-  --accent-2: #0d8570;
-  --accent-ink: #064538;
-  --accent-soft: #e0eee9;
-  --accent-line: #b9d8cd;
+  /* accent — brand blue */
+  --accent: #2b57b8;
+  --accent-2: #0166b3;
+  --accent-ink: #1b3a7e;
+  --accent-soft: #e7edf9;
+  --accent-line: #c2d0ec;
+  --accent-contrast: #ffffff;
 
-  /* warm highlight */
-  --warm: #a4570c;
-  --warm-soft: #f6e7d5;
-  --warm-line: #e8c9a6;
+  /* brand cyan / teal — graphics and accents, not body text */
+  --accent-bright: #12b3ea;
+  --accent-bright-soft: #e3f6fd;
+  --teal: #00bda5;
+
+  /* warm highlight (drafts, experimental states) */
+  --warm: #8a5316;
+  --warm-soft: #f6eadb;
+  --warm-line: #e4c7a6;
 
   /* semantic */
-  --ok: #2c6e49;
-  --ok-soft: #dcece1;
-  --warn: #a4570c;
-  --warn-soft: #f6e7d5;
-  --info: #2b5570;
-  --info-soft: #dfe9ef;
+  --ok: #1f7a4d;
+  --ok-soft: #dcebe2;
+  --warn: #8a5316;
+  --warn-soft: #f6eadb;
+  --info: #0166b3;
+  --info-soft: #dfeaf7;
 
   /* type */
   --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system,
@@ -76,10 +86,10 @@
   --radius-lg: 24px;
 
   /* depth */
-  --shadow-xs: 0 1px 2px rgb(19 26 28 / 0.05);
-  --shadow-sm: 0 1px 2px rgb(19 26 28 / 0.05), 0 4px 12px -6px rgb(19 26 28 / 0.12);
-  --shadow-md: 0 2px 4px rgb(19 26 28 / 0.04), 0 18px 40px -24px rgb(19 26 28 / 0.28);
-  --shadow-lg: 0 24px 80px -40px rgb(19 26 28 / 0.45);
+  --shadow-xs: 0 1px 2px rgb(16 27 45 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(16 27 45 / 0.06), 0 4px 12px -6px rgb(16 27 45 / 0.14);
+  --shadow-md: 0 2px 4px rgb(16 27 45 / 0.05), 0 18px 40px -24px rgb(16 27 45 / 0.3);
+  --shadow-lg: 0 24px 80px -40px rgb(16 27 45 / 0.5);
 
   /* motion */
   --ease: cubic-bezier(0.2, 0.7, 0.25, 1);
@@ -89,25 +99,31 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  --paper: #0b1110;
-  --paper-2: #101917;
-  --paper-3: #0e1513;
-  --paper-inset: #16201d;
+  --paper: #070f18;
+  --paper-2: #0c1826;
+  --paper-3: #091320;
+  --paper-inset: #122234;
 
-  --ink: #e9efec;
-  --ink-2: #c2ccc8;
-  --ink-3: #93a09b;
-  --ink-4: #71807a;
+  --ink: #e8eff7;
+  --ink-2: #c3d0de;
+  --ink-3: #93a6b6;
+  --ink-4: #6f8494;
 
-  --line: #233029;
-  --line-soft: #1b2620;
-  --line-ink: #cfe0d8;
+  --line: #1d2c3e;
+  --line-2: #29405a;
+  --line-soft: #142434;
+  --line-ink: #cfe0ec;
 
-  --accent: #5bd6b0;
-  --accent-2: #7fe4c4;
-  --accent-ink: #b8f0dc;
-  --accent-soft: #123128;
-  --accent-line: #1d4b3e;
+  --accent: #7ab0ff;
+  --accent-2: #9cc4ff;
+  --accent-ink: #cfe3ff;
+  --accent-soft: #102a44;
+  --accent-line: #1f4666;
+  --accent-contrast: #06110d;
+
+  --accent-bright: #39cdff;
+  --accent-bright-soft: #0d2b3d;
+  --teal: #5fe0cb;
 
   --warm: #e0a35f;
   --warm-soft: #33241a;
@@ -117,11 +133,11 @@
   --ok-soft: #14291d;
   --warn: #e0a35f;
   --warn-soft: #33241a;
-  --info: #8fb8d4;
-  --info-soft: #16242e;
+  --info: #39cdff;
+  --info-soft: #10283a;
 
-  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4), 0 6px 18px -10px rgb(0 0 0 / 0.6);
-  --shadow-md: 0 2px 6px rgb(0 0 0 / 0.5), 0 24px 60px -30px rgb(0 0 0 / 0.8);
-  --shadow-lg: 0 30px 100px -50px rgb(0 0 0 / 0.9);
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.45);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.45), 0 6px 18px -10px rgb(0 0 0 / 0.65);
+  --shadow-md: 0 2px 6px rgb(0 0 0 / 0.55), 0 24px 60px -30px rgb(0 0 0 / 0.85);
+  --shadow-lg: 0 30px 100px -50px rgb(0 0 0 / 0.95);
 }

@@ -163,7 +163,7 @@
   padding: 2.1rem 1.05rem 1.05rem;
   border: 1px solid var(--line-ink);
   border-radius: var(--radius-sm);
-  background: #fdfcf9;
+  background: #fbfcff;
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: 0.83rem;
@@ -174,8 +174,8 @@
 
 [data-theme='dark'] .prose pre,
 [data-theme='dark'] .code-block pre {
-  background: #0a0f0e;
-  border-color: #24312c;
+  background: #060d16;
+  border-color: #1d2c3e;
 }
 
 .prose pre code,

@@ -17,23 +17,23 @@ const { size = '2.1rem', label = 'BioChaoGroup' } = Astro.props;
   aria-label={label || undefined}
   aria-hidden={label ? undefined : 'true'}
 >
-  <rect width="32" height="32" rx="7.5" fill="var(--ink)" />
+  <rect width="32" height="32" rx="7.5" fill="#1b3a7e" />
   <!-- two backbone strands -->
   <path
     d="M11.4 7.2C8.5 11.6 8.5 20.4 11.4 24.8"
-    stroke="var(--accent)"
+    stroke="#ffffff"
     stroke-width="1.9"
     stroke-linecap="round"
   />
   <path
     d="M20.6 7.2C23.5 11.6 23.5 20.4 20.6 24.8"
-    stroke="var(--accent)"
+    stroke="#39cdff"
     stroke-width="1.9"
     stroke-linecap="round"
-    opacity="0.5"
+    opacity="0.9"
   />
   <!-- base pairs, slightly slanted as in a helix projection -->
-  <g stroke="var(--paper)" stroke-linecap="round">
+  <g stroke="#ffffff" stroke-linecap="round">
     <path d="M10.7 10.2L21.1 10.9" stroke-width="1.1" opacity="0.55" />
     <path d="M9.9 13.8L21.9 14.5" stroke-width="1.1" opacity="0.85" />
     <path d="M9.6 17.4L22.2 18.1" stroke-width="1.1" opacity="0.45" />

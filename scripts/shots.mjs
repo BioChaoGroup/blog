@@ -22,6 +22,7 @@ const getArg = (flag, fallback) => {
 };
 const PORT = Number(getArg('--port', '9333'));
 const OUT = getArg('--out', '.screenshots');
+const THEME_SUFFIX = process.env.SHOT_THEME ? `-${process.env.SHOT_THEME}` : '';
 const ONLY = getArg('--only', '');
 const BASE = process.env.PREVIEW_URL ?? 'http://localhost:4321/blog';
 
@@ -116,7 +117,10 @@ const { targetId } = await send('Target.createTarget', { url: 'about:blank' });
 const { sessionId } = await send('Target.attachToTarget', { targetId, flatten: true });
 await send('Page.enable', {}, sessionId);
 await send('Runtime.enable', {}, sessionId);
-await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] }, sessionId);
+const emulatedFeatures = [{ name: 'prefers-reduced-motion', value: 'reduce' }];
+if (process.env.SHOT_THEME === 'dark') emulatedFeatures.push({ name: 'prefers-color-scheme', value: 'dark' });
+if (process.env.SHOT_THEME === 'light') emulatedFeatures.push({ name: 'prefers-color-scheme', value: 'light' });
+await send('Emulation.setEmulatedMedia', { features: emulatedFeatures }, sessionId);
 
 const results = [];
 
@@ -173,7 +177,7 @@ for (const shot of selected) {
     { format: 'png', captureBeyondViewport: false },
     sessionId,
   );
-  writeFileSync(`${OUT}/${name}-viewport.png`, Buffer.from(viewport.data, 'base64'));
+  writeFileSync(`${OUT}/${name}${THEME_SUFFIX}-viewport.png`, Buffer.from(viewport.data, 'base64'));
 
   // full-page capture
   const metrics = await send('Page.getLayoutMetrics', {}, sessionId);
@@ -181,7 +185,7 @@ for (const shot of selected) {
   await send('Emulation.setDeviceMetricsOverride', { width, height: contentHeight, deviceScaleFactor: mobile ? 1 : 1, mobile }, sessionId);
   await sleep(350);
   const full = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true }, sessionId);
-  writeFileSync(`${OUT}/${name}-full.png`, Buffer.from(full.data, 'base64'));
+  writeFileSync(`${OUT}/${name}${THEME_SUFFIX}-full.png`, Buffer.from(full.data, 'base64'));
   await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: mobile ? 2 : 1, mobile }, sessionId);
 
   results.push({

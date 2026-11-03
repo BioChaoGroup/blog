@@ -250,3 +250,19 @@ Almost always the base path.
 
 For anything URL- or Pages-related (base path, custom domain, rollback), see
 [deployment.md](deployment.md).
+
+
+## 5. Colour contrast
+
+The palette is anchored on BGI's brand blue (`#2b57b8` deep, `#0166b3` blue,
+`#12b3ea` cyan, `#00bda5` teal). Text colours must stay WCAG AA compliant in both
+themes, so before changing a token run:
+
+```sh
+pnpm check:contrast
+```
+
+It parses `src/styles/tokens.css`, computes every text-on-surface pair and fails
+if anything drops below 4.5:1. The cyan and teal tokens are for graphics
+(tracks, diagrams, chips) only — they are intentionally not used for body text
+on white.

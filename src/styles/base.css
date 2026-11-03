@@ -323,11 +323,7 @@ hr {
 
 .btn--accent {
   --btn-bg: var(--accent);
-  --btn-fg: #ffffff;
-}
-
-[data-theme='dark'] .btn--accent {
-  --btn-fg: #06110d;
+  --btn-fg: var(--accent-contrast);
 }
 
 .btn--ghost {
@@ -1268,11 +1264,11 @@ a.tag:hover {
 }
 
 .track__seq .b-c {
-  color: var(--info);
+  color: var(--accent-bright);
 }
 
 .track__seq .b-g {
-  color: var(--warm);
+  color: var(--teal);
 }
 
 .track__seq .b-t {

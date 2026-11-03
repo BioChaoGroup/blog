@@ -12,7 +12,8 @@
     "check:content": "node scripts/check-content.mjs",
     "check:links": "node scripts/check-links.mjs",
     "qa": "node scripts/qa.mjs",
-    "shots": "node scripts/shots.mjs"
+    "shots": "node scripts/shots.mjs",
+    "check:contrast": "node scripts/contrast.mjs"
   },
   "engines": {
     "node": ">=20.11.0"
