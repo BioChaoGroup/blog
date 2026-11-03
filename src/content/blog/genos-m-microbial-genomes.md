@@ -1,176 +1,230 @@
 ---
 key: genos-m-microbial-genomes
 lang: en
-title: 'Genos-m: a microbial-genome model that fits on one GPU'
-description: 'A domain-specific DNA foundation model for human-associated microbes: why the corpus matters more than the architecture, what frozen embeddings buy on microbial benchmarks, and what the preprint does not claim.'
-lede: 'A general DNA model has seen everything. A microbiome researcher needs a model that has read the same sequences, at the same completeness, with the same blind spots.'
-date: 2026-11-03
+title: 'Genos-m is open source: a foundation model for human-associated microbes'
+description: 'The Genos team at BGI and Zhejiang Lab releases Genos-m, a 4.7B sparse MoE foundation model for human-associated microbial genomes that activates only 330M parameters yet matches Evo2-40B on most benchmarks. Model and code are fully open source.'
+lede: 'It is not a bioinformatics tool fine-tuned on top of a general DNA model: the corpus, the architecture and the evaluation were all redesigned around the human microbiome.'
+date: 2026-05-23
+updated: 2026-11-03
 authors: ['Fang Chao']
 tags: ['dna-language-models', 'microbiome', 'machine-learning', 'methods']
-kind: note
+kind: article
 related: ['dna-language-models']
 cover: '/images/blog/genos-m-microbial-genomes/cover.svg'
 ---
 
-Most genomic foundation models are trained on "DNA" in the broadest sense — archaea,
-bacteria, fungi, plants, human chromosomes — and that breadth is the point. It is also a
-limitation. The sequences that matter for the human microbiome are not a random sample of
-that space. They are strain-level variants, accessory genes carried on mobile elements,
-prophages, and genomes known only as MAGs assembled from metagenomes at 90% completeness.
-A general model has seen many of these things; it has not been built to represent them.
+> **The Genos team at BGI and Zhejiang Lab has released Genos-m, a 4.7B-parameter sparse MoE foundation model for microbial genomes that activates only 330M parameters yet matches Evo2-40B. Model and code are fully open source.**
 
-Genos-m is the Genos team's answer to that mismatch: a foundation model pretrained on
-human-associated microbial genomes, released in May 2026 with weights, inference code and
-documentation, and described in a preprint by Chao Fang *et al.* (BGI Research and
-Zhejiang Lab). This note is about what the paper actually shows, what it deliberately does
-not claim, and where a lab like ours would use it. A longer Chinese walkthrough is on the
-lab's WeChat account (linked at the end).
+In May 2026 the Genos team at BGI released and open-sourced **Genos-m**, an open foundation model built specifically for human-associated microbial genomes.
 
-## The corpus is the claim
+It is the microbial continuation of the Genos line — but it is not a bioinformatics tool "fine-tuned" on top of a general DNA model: the corpus, the architecture and the evaluation were all **redesigned around human-associated microbes**.
 
-The architecture is inherited from Genos, the team's earlier human-genome model; the
-argument of Genos-m lives in its training data. The corpus was built in layers:
+![Genos-m concept artwork: from human-associated microbial genomes and DNA sequence to model representations.](/images/blog/genos-m-microbial-genomes/concept.webp)
 
-- species-level representative genomes from **GTDB R220**, for broad prokaryotic context;
-- public human-associated genomes from **UHGG, AWI-Gen2, gcMeta, IMGG, CGR, HROM and
-  PMDB**, plus related resources;
-- **in-house high-quality MAGs**, which after stratified sampling supplied roughly one
-  third of the final training tokens;
-- **UHGV phage genomes**, because the virome is part of the community.
+![The preprint's first page: title, authors and abstract (authors are listed alphabetically by first name).](/images/blog/genos-m-microbial-genomes/paper-title.webp)
 
-Quality control is where a microbiome model earns or loses its representation. Prokaryotic
-genomes were kept only as isolate genomes or MAGs with completeness above 90% and
-contamination below 1% — stricter than the usual 5% contamination cut. Phages had to reach
-90% completeness under CheckV. The final corpus is about **1.2 trillion nucleotide
-tokens**, covering 186 phyla, 3,448 families and 69,056 species; the retained
-human-associated subset alone covers 45 phyla, 585 families and 12,273 species.
-Reverse-complement augmentation was applied with 50% probability, and the context window
-was extended progressively through 8k, 32k, 128k and finally 1M bases.
+## Why a "microbial-specific" genomic foundation model?
 
-That last point is not cosmetic. A bacterial genome is commonly 2–6 Mbp: large enough that
-region-level questions (a biosynthetic gene cluster, a pathogenicity island, a prophage)
-only become answerable when the model can see a megabase at once.
+Existing genomic foundation models mostly target "all of DNA", with training corpora that span eukaryotes, prokaryotes and viruses.
 
-## Architecture, in numbers
+But for researchers working on the human microbiome, the real headaches are:
 
-Genos-m is a sparsely activated mixture-of-experts Transformer:
+- **Strain-level diversity** — *E. coli*, for example, has an enormous number of strains, and each genome differs in small ways.
+- **Horizontal gene transfer** — resistance genes passed from one bacterial species to another, like a baton in a relay.
+- **MAGs and uncultured microbes** — many new genomes are first assembled from metagenomic data, with no guarantee of completeness and often high contamination.
+- **Microenvironment specificity** — gut, oral cavity, skin, respiratory tract: each niche has a markedly different community structure.
+
+A general DNA model has seen "every species", but it does not necessarily "understand" how these microbes survive in the human microenvironments they inhabit.
+
+**Genos-m is meant to solve exactly that problem.**
+
+## Architecture: large, but economical
+
+![Genos-m architecture: token embedding, GQA and RMSNorm, a mixture of 32 experts that picks 2, and a 1M bp context.](/images/blog/genos-m-microbial-genomes/architecture.webp)
+
+Genos-m builds on the Genos architecture and uses a **sparsely activated mixture-of-experts (MoE) Transformer**:
 
 | Property | Value |
 | --- | --- |
-| Total / activated parameters | 4.7B total, ~330M per forward pass |
-| Experts | 32, Top-2 routing (Genos used 8) |
-| Context | up to 1M bp |
-| Attention / position | grouped-query attention + FlashAttention, RoPE base 50M |
-| Resolution | single nucleotide; ambiguous and unknown tokens excluded from the loss |
+| Total parameters | 4.7B |
+| Activated parameters | ~330M |
+| Experts | 32 (Top-2 routing) |
+| Context length | 1M bp |
+| Attention | GQA + FlashAttention |
+| Position encoding | RoPE (base = 50M) |
 
-Because only two of the 32 experts fire per token, long-context inference stays practical:
-the paper reports processing about 200 kb fragments on a 24 GB consumer GPU and full 1M bp
-context on a single 80 GB card. A genomic foundation model that needs a cluster to embed a
-gene cluster is not a tool most labs can use; this is the design decision that makes
-Genos-m usable.
+Key design points:
 
-## What frozen representations buy
+1. **32 experts + Top-2 routing**: the router dynamically picks the 2 most suitable of the 32 experts for each token. Inference activates only 3.3 of 47 billion parameters — more than 10× more efficient than a dense model of the same size.
+2. **Million-base context**: single-sequence inference up to 1M bp. A consumer GPU with 24 GB of memory can run about 200 Kbp, enough to cover the vast majority of microbial genes, gene clusters and their neighbourhoods.
+3. **Single-nucleotide resolution**: precise to each base; N and special characters are excluded from the loss.
 
-The evaluation is deliberately conservative: the pretrained backbone is **frozen**, the
-final-layer hidden states are mean-pooled, and only lightweight classifiers or regressors
-are trained. That measures the representation rather than a fine-tuning recipe.
+Worth emphasizing: with **only 330M activated parameters**, Genos-m matches and sometimes exceeds **Evo2-40B** (40 billion parameters) on most benchmarks. Parameter efficiency, maxed out.
 
-On five local sequence and gene-level classification tasks, Genos-m was in the leading
-tier, with the best antibiotic-resistance gene (ARG) identification result and near-parity
-with Evo2-40B elsewhere:
+## Training data: a 1.2-trillion-token microbial universe
 
-| Task | Metric (AUROC) |
+![Composition of the pretraining corpus: GTDB R220, public human-associated prokaryotic genomes, in-house high-quality human gut MAGs and UHGV phages.](/images/blog/genos-m-microbial-genomes/table-corpus.webp)
+
+The Genos-m pretraining corpus was built as a layered system:
+
+| Data source | Tokens (B) | Share |
+| --- | --- | --- |
+| GTDB R220 representative genomes | 379 | 31.3% |
+| Public human-associated prokaryotic genomes (UHGG, AWI-Gen2, gcMeta, IMGG, CGR, HROM, PMDB*) | 446 | 36.8% |
+| In-house high-quality human gut MAGs | 382 | 31.5% |
+| UHGV human-associated phage genomes | 3.8 | 0.3% |
+
+**\* PMDB is BGI's manually curated pathogenic-feature dataset, covering all known pathogenic species.**
+
+**Total scale: about 1.2 trillion tokens, covering 186 phyla and nearly 70,000 species.**
+
+### How strict is the quality control?
+
+- MAGs are required to have **completeness > 90% and contamination < 1%** (the usual standard is < 5%).
+- Phages must reach completeness > 90% under CheckV.
+- Reverse-complement augmentation with 50% probability.
+- Progressive context-length extension: 8K → 32K → 128K → 1M.
+
+BGI's in-house gut microbiome data from Chinese populations contributed about one third of the pretraining tokens, which matters particularly for coverage of East Asian microbiomes.
+
+The niches covered also include gut (~89%), oral cavity, skin, respiratory tract and female reproductive tract, with geographic coverage spanning Asia (~61%), Europe, North America and Africa.
+
+## Benchmark performance: 330M punching at the 40B weight
+
+The Genos team built a complete **multi-scale evaluation suite (Genos-m Benchmarks)** spanning five dimensions: short sequences, gene level, regional long context, whole genome, and zero-shot RNA fitness.
+
+Some key results:
+
+### Local sequence and gene-level tasks
+
+| Task | Genos-m | Evo2-40B | DNABERT-2 | Rank |
+| --- | --- | --- | --- | --- |
+| Antibiotic-resistance gene identification | 0.9896 | 0.9884 | 0.9176 | 🥇 |
+| Virulence factor identification | 0.9548 | 0.9617 | 0.7840 | 🥈 |
+| Six-class bacterial gene classification | 0.9932 | 0.9937 | 0.9637 | 🥈 |
+| Essential gene identification | 0.8534 | 0.8619 | 0.6658 | 🥈 |
+| Promoter identification | 0.8460 | 0.8504 | 0.6820 | 🥈 |
+
+### Gene-fitness regression (SOTA on 5 of 8 subtasks)
+
+![Scores across benchmark tasks: DNABERT-2, Nucleotide Transformer, Evo and Genos-m.](/images/blog/genos-m-microbial-genomes/benchmark-scores.webp)
+
+In the regression tasks that predict gene-fitness scores under different environmental conditions, Genos-m achieved the **highest Pearson correlation on 5 of the subtasks**, and ranked second only to Evo2-40B on the remaining 3.
+
+One detail worth emphasizing: **a frozen backbone plus a lightweight MLP head**. These capabilities did not come from fine-tuning; **the pretrained representation itself already carries generalizable signal for these tasks.**
+
+### BGC regional long context
+
+BGCs (biosynthetic gene clusters) are multi-gene regional tasks that test long-context integration:
+
+- BGC / non-BGC binary classification: AUROC = 0.9907 (essentially level with Evo2-40B's 0.9911)
+- Multi-label BGC classification: AUROC = 0.9216 (above Evo2-40B's 0.8951) 🥇
+
+### Zero-shot RNA fitness
+
+![Zero-shot RNA-fitness evaluation: mean Spearman, AUC and MCC across 13 prokaryote-related assay subsets.](/images/blog/genos-m-microbial-genomes/table-rnafitness.webp)
+
+Here a DNA model is used directly for RNA function prediction (U→T conversion), **without any training**, ranking mutants by next-token log-likelihood.
+
+Across 13 prokaryote-related RNA assay subsets, Genos-m reached a mean Spearman correlation of **0.313**, ranking 2nd among public models.
+
+This suggests that even trained only on DNA, the model has implicitly captured the functional boundaries of RNA.
+
+### Whole-genome phenotype prediction
+
+This benchmark chops each bacterial genome into 1M bp chunks, averages the chunk embeddings into a genome-level embedding, and then predicts strain phenotypes (Gram staining, oxygen requirement, motility, sporulation, etc.):
+
+| Phenotype | Genos-m | Bacformer |
+| --- | --- | --- |
+| Gram-positive | 98.41 | 97.61 |
+| Anaerobe | 98.14 | 98.92 |
+| Motility | 83.22 | 87.01 |
+| Sporulation | 90.24 | 90.85 |
+
+With simple aggregation of sequence-level embeddings, Genos-m approaches dedicated whole-genome models such as Bacformer, demonstrating its **cross-scale compositional ability**.
+
+## Interpretability: SAEs find the genome's "semantic units"
+
+Using **sparse autoencoders (SAEs)** to decompose the model's internal activations, the team identified sparse features that align closely with known genomic structures:
+
+- ORF-related features: able to distinguish the forward and reverse strands
+- Intergenic-region features
+- tRNA and rRNA features
+
+SAE methods were first used in NLP to dissect the internal representations of large models; Genos-m brings them into microbial genomics, providing preliminary mechanistic-interpretability evidence for "what the model actually learned".
+
+## Downstream applications: not just a sequence encoder
+
+### Case 1: microbiome self-supervised learning + Genos-m representations
+
+Genos-m's genome-level embeddings are used as species features and plugged into a microbiome community self-supervised learning model. In **cross-cohort colorectal cancer (CRC) classification**:
+
+> Genos-m representations + SSL model **beat** the traditional species-abundance random forest model.
+
+This result matters: traditional microbiome analysis uses only "who is there" (species abundance), whereas Genos-m adds information about "what the genome looks like", which is crucial for differentiating function-related phenotypes.
+
+### Case 2: low-depth metagenomic sample representations
+
+**With as few as 10,000 metagenomic reads**, Genos-m can generate stable sample-level embeddings that preserve enterotype structure and distinguish geographic origin.
+
+Why does this matter? Many public datasets and clinical samples are sequenced at depths too low to support assembly, and Genos-m's low-input representation capability opens the door to secondary analysis of this "shallow data".
+
+## Two more thoughts: pathogen detection and multi-omics
+
+Part of the Genos-m training data is **PMDB (Pathogenic Microorganism Database)**, BGI's own curated pathogenic-feature database. This means Genos-m is not like Evo2, which "has seen DNA sequences from tens of thousands of organisms, some of which are pathogens". It has **specifically learned a large amount of pathogenic-feature data (though this version does not yet integrate fungi or RNA viruses)**.
+
+This may be more practically meaningful for clinical applications: the difference between pathogenic and ordinary environmental microbes is no smaller than that between a panda and a bamboo rat — pathogen genomes have distinctive "survival strategies" (adhesins, secretion systems, pathogenicity islands, resistance islands, etc.) that are low-frequency signals in general DNA corpora, but for which Genos-m may have dedicated "experts".
+
+Genomics is undergoing a paradigm shift from "single-omics classification" to "multi-omics integration". To push things further, you need to understand, at the same time, its genome (what species it is), its resistome (what resistance it carries), its virulome (how dangerous it is), its transcriptional regulation (under what conditions it activates these genes), and even its metabolome (how it survives in the host microenvironment).
+
+That requires a **cross-scale, cross-level information representation capability**.
+
+Today's practice is usually to run each omics analysis separately and then stitch them together by force in the Discussion section.
+
+Genos-m suggests a possibility: use genome-sequence embeddings as a unified substrate, so that downstream omics tasks "talk" within the same representation space.
+
+The CRC cross-cohort analysis in the paper is a good example — Genos-m's genome-level embeddings were fed into a microbiome self-supervised model and outperformed the traditional species-abundance approach. That means beyond "who is there", the "what does the genome look like" dimension really does add value for distinguishing phenotypes.
+
+Genos-m does not solve every problem directly, but it may become that **base layer connecting different omics tasks**. On top of it you can stack resistance-prediction heads, virulence-prediction heads, host-pathogen interaction heads, even CRISPR-targeting heads.
+
+## Open source and usage
+
+Genos-m is fully open source:
+
+- Model weights: Hugging Face → [BGI-HangzhouAI/Genos-m](https://huggingface.co/BGI-HangzhouAI/Genos-m)
+- Inference code and docs: GitHub → [BGI-HangzhouAI/Genos-m](https://github.com/BGI-HangzhouAI/Genos-m)
+- Megatron training-framework weights: Hugging Face → Genos-m-Megatron
+- SAE model weights and feature-search code included (to be released later)
+
+### Hardware requirements
+
+| Hardware | Capability |
 | --- | --- |
-| Antibiotic-resistance gene identification | 0.9896 |
-| Virulence factor gene identification | 0.9548 |
-| Six-class genomic-region classification | 0.9932 |
-| Essential gene identification | 0.8534 |
-| Promoter prediction | 0.8460 |
+| A800 80GB × 1 | full 1M bp inference |
+| Consumer 24GB GPU | ~200K bp inference |
 
-Gene-fitness regression — eight condition-specific subtasks spanning nutrient sources and
-chemical stress — is where domain-specific pretraining shows most clearly: Genos-m ranked
-first in five of the eight (L-arabinose as sole carbon source, L-histidine, glucose minimal
-medium, pyruvate, perchlorate stress) and second to Evo2-40B in the other three.
+The model weights occupy only about **9GB** of GPU memory; with FlashAttention optimisation, it runs on the hardware most bioinformatics work already has.
 
-The regional long-context tasks matter more for our kind of work. On BGC (biosynthetic
-gene cluster) versus non-BGC classification, Genos-m reached 0.9907 AUROC, level with
-Evo2-40B at 0.9911; on multi-label BGC class annotation it was the best model tested, at
-0.9216. A BGC is a set of co-localised, jointly regulated genes that may share almost no
-sequence identity with BGCs in other taxa — getting it right requires integrating across
-many kilobases, which is exactly what a 1M bp window is for.
+Both embedding extraction and sequence continuation are supported.
 
-One result deserves a careful reading: zero-shot transfer to prokaryote-related RNAfitness
-assays. After converting U to T and scoring mutant sequences by average next-token
-log-likelihood, Genos-m reached a mean Spearman correlation of 0.313 across 13 assays —
-second among the compared models, behind Evo2-7B at 0.390. The honest interpretation is
-not that a DNA model is an RNA model. In prokaryotes, DNA sequence, transcript sequence
-and coding constraints are tightly coupled, so a model trained on genomes can pick up some
-RNA-related signal; the paper says this explicitly.
+## In summary
 
-## The readout problem
+| Dimension | Takeaway |
+| --- | --- |
+| Positioning | purpose-built for human-associated microbial genomes, not general DNA |
+| Architecture | 4.7B MoE / 330M activated / 1M context |
+| Data | 1.2T tokens, 69K species, strict quality control |
+| Performance | on par with Evo2-40B, leading or SOTA on most benchmarks |
+| Interpretability | SAEs reveal ORF/tRNA/rRNA semantic features |
+| Hardware | full run on a single A800, usable on 24GB consumer cards |
+| Openness | weights + code + docs + benchmarks all open |
 
-Two analyses are worth keeping in mind beyond the headline numbers.
+Genos-m's contribution goes beyond the model itself — it comes with a complete, **standard benchmark suite** and a **multi-scale evaluation framework**, which is a long-standing pain point for fair comparisons between genomic foundation models. The Genos team did this laborious but important work.
 
-Whole-genome phenotype prediction uses GIDEON-derived labels from BacBench and linear
-classifiers on mean-pooled genome embeddings, without translation or annotation. Genos-m
-approaches protein-based baselines such as ESM-2 and Bacformer on several traits. But the
-authors are careful about what that means: a million-base context does not guarantee that a
-single fixed-dimensional embedding keeps every biologically informative variant, accessory
-gene or region — mean pooling can dilute exactly the signal you care about. Better readouts,
-not only longer contexts, are the open problem.
+## Further reading
 
-The interpretability check is a sparse autoencoder trained on last-layer activations from
-about 305,000 randomly sampled 32k chunks (roughly a billion token-level activations,
-4,096 latent features, Batch-TopK with k = 128). High-activation features aligned with
-annotated ORFs — including strand-biased feature pairs — intergenic regions, and tRNA and
-rRNA loci in the *E. coli* reference genome NC_000913.3, scored by Domain F1. This is
-preliminary evidence on one reference genome, not a complete account of what the model
-encodes, but it is evidence that the activations contain separable genomic structure rather
-than only local nucleotide statistics.
-
-## From species tokens to genome-informed communities
-
-The application we care about most is the microbiome one. Community-level models usually
-treat species as discrete tokens and learn abundance and co-occurrence structure; two
-samples with the same species list look identical, even if the strains and gene repertoires
-differ. Genos-m offers a way to give each species a sequence-derived embedding: genome-level
-embeddings are projected and aligned with species tokens inside a Transformer-based
-self-supervised model pretrained on species-level abundance profiles from roughly 400,000
-unlabelled human gut metagenomes.
-
-Evaluated on 14 independent colorectal cancer (CRC) case-control cohorts, with the
-self-supervised backbone frozen and only an MLP head trained, the genome-informed model
-reached a mean within-cohort AUROC of 0.89 against 0.86 for the reported species-abundance
-random-forest baseline, and 0.77 against 0.72 in pairwise cross-cohort training and
-testing. The comparison is against the baseline reported in the source study, and the gain
-is real but not a clinical claim.
-
-Low-depth representation is the other useful result. Mean-pooled read-level embeddings from
-as few as **10,000 metagenomic reads** stayed stable across depth (10K, 100K, 1M and 10M
-reads, five replicates each), retained host geographic origin with a linear classifier at
-AUC 0.998, and recovered enterotype structure: unsupervised clustering of 10K-read
-embeddings agreed 86% with enterotypes defined from full-depth genus abundance, where a
-Kraken2 genus profile from the same 10K reads agreed only 54%. These embeddings do not
-replace taxonomic profiling; they are a reference-free way to compare samples when deep
-profiling is not available.
-
-## What this does not claim
-
-The preprint is a preprint: posted in May 2026, not peer reviewed, and the benchmark suite
-was designed by the authors. The results describe frozen representations; they say nothing
-about where fine-tuning or continued pretraining would land. Genos-m is not a universal DNA
-model across the tree of life and not an RNA foundation model, and the whole-genome
-phenotype results do not imply unrestricted phenotype prediction across untested traits or
-taxa. The CRC result is a research classification improvement over a published baseline,
-not evidence of clinical utility.
-
-For us, the useful framing is narrower and still interesting: Genos-m is a reusable
-sequence representation for microbial genomes and metagenomes, with a readout problem that
-the field has not solved, released in a form that fits on hardware we actually have.
-
-## Resources
-
-- Preprint: [Genos-m: a foundation model for human-associated microbial genomes](https://doi.org/10.64898/2026.05.21.726868) (bioRxiv, May 2026)
-- Code and inference documentation: [BGI-HangzhouAI/Genos-m](https://github.com/BGI-HangzhouAI/Genos-m)
-- Model weights: [huggingface.co/BGI-HangzhouAI/Genos-m](https://huggingface.co/BGI-HangzhouAI/Genos-m)
-- Chinese walkthrough on the lab's WeChat account: [Genos-m 开源！面向人源微生物基因组的基座大模型](https://mp.weixin.qq.com/s/7Qi_vZuwKjdjzSU-bXHtnQ)
+- Preprint: Genos-m: a foundation model for human-associated microbial genomes ([bioRxiv](https://www.biorxiv.org/content/10.64898/2026.05.21.726868v1))
+- Model repository: https://github.com/BGI-HangzhouAI/Genos-m
+- Hugging Face: https://huggingface.co/BGI-HangzhouAI/Genos-m
+- The original Genos work: [the first 10-billion-scale human genome foundation model](https://mp.weixin.qq.com/s?__biz=MjM5MDIxNTQ4MA==&mid=2651442233&idx=1&sn=8eb8d34a55ae78adf640da7b5faf359b&scene=21#wechat_redirect)
+- Chinese original: [the lab's WeChat article](https://mp.weixin.qq.com/s/7Qi_vZuwKjdjzSU-bXHtnQ) (23 May 2026; this site version keeps the original text and only drops decorative icons from headings and lists)
