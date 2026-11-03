@@ -128,7 +128,11 @@ for (const shot of selected) {
     sessionId,
   );
   await send('Page.navigate', { url: `${BASE}${path}` }, sessionId);
-  await sleep(700);
+  await sleep(500);
+  // Web fonts change text metrics; measuring before they settle produces false
+  // layout reports (and wrong full-page heights).
+  await send('Runtime.evaluate', { expression: 'document.fonts.ready', awaitPromise: true }, sessionId).catch(() => {});
+  await sleep(250);
 
   const { result } = await send(
     'Runtime.evaluate',
