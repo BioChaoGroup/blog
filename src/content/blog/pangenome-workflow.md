@@ -17,7 +17,7 @@ organism every step has to be re-argued, because there is no reference-quality
 assembly to lean on and often no curated annotation.
 
 This is the order of operations we use, written from our own non-model pangenome
-work ([/projects/pangenome-w-anomalus/](/projects/pangenome-w-anomalus/)). It is
+work (the [W. anomalus pangenome project](/projects/pangenome-w-anomalus/)). It is
 more about failure modes than flags: the flags are in the command block, and the
 pitfalls are what cost the weeks.
 

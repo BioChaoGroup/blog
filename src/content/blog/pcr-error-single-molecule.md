@@ -23,8 +23,8 @@ Single-molecule sequencing is what made the separation possible. Instead of
 reading a population average, it reads individual molecules — and with consensus
 calling, individual strands — so an error can be attributed to the step that
 produced it. This post summarises that logic and what it changes in practice. Our
-runnable copy of the assay's analysis scripts lives at
-[/projects/pcr-fidelity/](/projects/pcr-fidelity/); the underlying study is
+runnable copy of the assay's analysis scripts lives in the
+[pcr-fidelity project](/projects/pcr-fidelity/); the underlying study is
 [Potapov & Ong (2017)](https://doi.org/10.1371/journal.pone.0169774).
 
 ## One number, at least three mechanisms
@@ -229,4 +229,4 @@ separation of structure-induced switching from jumping PCR in complex templates:
 both produce chimeras, they respond to different protocol changes, and the
 single-molecule assays that would distinguish them at scale are still
 specialised. Our own scripts keep that analysis reproducible while the question
-is worked out ([/projects/pcr-fidelity/](/projects/pcr-fidelity/)).
+is worked out (see [pcr-fidelity](/projects/pcr-fidelity/)).

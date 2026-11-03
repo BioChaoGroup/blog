@@ -19,10 +19,10 @@ understand which operations are actually fast on the hardware in front of you.
 
 This post is about the practical part: how the MPS backend differs from CUDA, why
 Caduceus and Mamba need a port rather than an environment variable, and how we
-benchmark without flattering ourselves. The project is at
-[/projects/dna-language-models/](/projects/dna-language-models/); the two code
-artifacts are [/tools/caduceus-osx/](/tools/caduceus-osx/) and
-[/tools/mamba-ssm-macos/](/tools/mamba-ssm-macos/).
+benchmark without flattering ourselves. The project is
+[dna-language-models](/projects/dna-language-models/); the two code
+artifacts are [caduceus-osx](/tools/caduceus-osx/) and
+[mamba-ssm-macos](/tools/mamba-ssm-macos/).
 
 ## Why a laptop is a target, and what it is not
 

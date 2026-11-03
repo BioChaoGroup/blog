@@ -183,3 +183,31 @@ After a deploy, spot-check the live site (not just `dist/`):
 
 Operational maintenance (refreshing the GitHub snapshot, adding people and
 publications, upgrading Astro) is in [maintenance.md](maintenance.md).
+
+
+## Pushing changes to `.github/workflows/*`
+
+GitHub rejects workflow-file changes pushed with an OAuth token that lacks the
+`workflow` scope:
+
+```
+! [remote rejected] main -> main (refusing to allow an OAuth App to create or
+  update workflow `.github/workflows/deploy.yml` without `workflow` scope)
+```
+
+Two ways around it, both used in this repository's first deploy:
+
+1. **SSH instead of HTTPS** — the scope rule applies to OAuth tokens, not SSH
+   keys. If port 22 is blocked by a corporate network or a local proxy, GitHub
+   also serves SSH on port 443:
+
+   ```sh
+   ssh -T -p 443 git@ssh.github.com          # test the key
+   git push ssh://git@ssh.github.com:443/BioChaoGroup/blog.git main
+   ```
+
+2. **Grant the scope once** — `gh auth refresh -h github.com -s workflow`, then
+   push normally over HTTPS.
+
+Everything else (content, components, styles, docs) pushes fine over HTTPS with
+the `repo` scope.

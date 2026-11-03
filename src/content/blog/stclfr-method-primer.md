@@ -21,8 +21,8 @@ The claim is easy to state and surprisingly easy to lose. This post is about the
 two common ways to apply the label, why the difference between them is larger
 than it looks, and what "complete coverage" should mean as a specification rather
 than a slogan. It is the method-side companion to our
-[barcode linkage post](/posts/linked-read-metagenome-assembly/); the projects
-themselves are described at [/projects/stclfr/](/projects/stclfr/).
+[barcode linkage post](/posts/linked-read-metagenome-assembly/); the project itself is described at
+[stclfr](/projects/stclfr/).
 
 ## Two ways to barcode one molecule
 
@@ -53,7 +53,7 @@ molecules are labelled in bulk rather than inside droplets; the chemistry is
 described by [Wang et al. (2019)](https://doi.org/10.1101/gr.245126.118). Our
 stcLFR variant is an attempt to push the same idea towards a stricter design
 target: not merely "most molecules get a barcode", but "every captured molecule
-is observed along its whole length" ([/projects/stclfr/](/projects/stclfr/)).
+is observed along its whole length" (see [stclfr](/projects/stclfr/)).
 
 The single-tube design trades one failure mode for another. There is no emulsion
 to lose molecules in, no droplet-merging step and no demulsification loss. In

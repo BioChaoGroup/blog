@@ -17,9 +17,9 @@ a result. Everything in this post is about the second kind, and none of it is
 novel. It is an inventory of the boring choices that we have found actually
 matter, written down mostly so that we stop re-learning them.
 
-The tooling described here lives at
-[/projects/lab-infrastructure/](/projects/lab-infrastructure/) and
-[/tools/dcs-harness/](/tools/dcs-harness/). This is not a product pitch; it is a
+The tooling described here lives in the
+[lab-infrastructure project](/projects/lab-infrastructure/) and
+[dcs-harness](/tools/dcs-harness/). This is not a product pitch; it is a
 description of what we run and why we think it earns its place.
 
 ## Re-runnability is a property of the boring parts
