@@ -1,0 +1,224 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Diagram of the Genos-m pipeline: a curated microbial genome corpus is tokenised, routed through 32 sparse experts, and frozen embeddings feed downstream readouts">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07242d"/>
+      <stop offset="0.55" stop-color="#041c24"/>
+      <stop offset="1" stop-color="#062a35"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.18" cy="0.16" r="0.8">
+      <stop offset="0" stop-color="#00b1d7" stop-opacity="0.24"/>
+      <stop offset="0.5" stop-color="#00b1d7" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#00b1d7" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.92" cy="0.9" r="0.62">
+      <stop offset="0" stop-color="#c07a2a" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#c07a2a" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#00b1d7" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glow)"/>
+  <rect width="1200" height="675" fill="url(#glow2)"/>
+
+  <!-- header -->
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="2.6">
+    <text x="88" y="84" font-size="13" fill="#00b1d7">GENOS-M · HUMAN-ASSOCIATED MICROBES</text>
+    <text x="1112" y="84" font-size="12" fill="#7c9ea9" text-anchor="end">PREPRINT · MAY 2026</text>
+  </g>
+
+  <!-- ============ PRETRAIN ============ -->
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="3">
+    <text x="88" y="132" font-size="12" fill="#7c9ea9">01 · PRETRAIN</text>
+    <path d="M232 127h880" stroke="#14414e" stroke-width="1"/>
+  </g>
+
+  <!-- corpus -->
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="2.2">
+    <text x="88" y="176" font-size="12" fill="#9cc4cf">1.2T TOKENS · 69,056 SPECIES</text>
+  </g>
+  <rect x="88" y="196" width="292" height="26" rx="13" fill="#0a303c"/>
+  <g>
+    <rect x="102" y="202" width="64" height="14" rx="7" fill="#00b1d7" opacity="0.9"/>
+    <rect x="176" y="202" width="40" height="14" rx="7" fill="#6fe0f5" opacity="0.75"/>
+    <rect x="226" y="202" width="58" height="14" rx="7" fill="#c07a2a" opacity="0.85"/>
+    <rect x="294" y="202" width="34" height="14" rx="7" fill="#7fbac6" opacity="0.7"/>
+    <rect x="338" y="202" width="28" height="14" rx="7" fill="#00b1d7" opacity="0.55"/>
+  </g>
+  <!-- MAG / phage dots -->
+  <g fill="#00b1d7">
+    <circle cx="98" cy="250" r="4" opacity="0.9"/>
+    <circle cx="118" cy="250" r="4" opacity="0.55"/>
+    <circle cx="138" cy="250" r="4" opacity="0.8"/>
+    <circle cx="158" cy="250" r="4" opacity="0.45"/>
+    <circle cx="178" cy="250" r="4" opacity="0.75"/>
+  </g>
+  <g fill="#c07a2a">
+    <circle cx="210" cy="250" r="4" opacity="0.85"/>
+    <circle cx="230" cy="250" r="4" opacity="0.5"/>
+    <circle cx="250" cy="250" r="4" opacity="0.7"/>
+  </g>
+  <g fill="#7fbac6">
+    <circle cx="282" cy="250" r="4" opacity="0.7"/>
+    <circle cx="302" cy="250" r="4" opacity="0.45"/>
+    <circle cx="322" cy="250" r="4" opacity="0.65"/>
+  </g>
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="1.8">
+    <text x="88" y="288" font-size="11" fill="#5f8794">GTDB · UHGG · IN-HOUSE MAGs · UHGV</text>
+  </g>
+
+  <!-- arrow corpus -> tokens -->
+  <path d="M388 209h22" stroke="#2f6a7a" stroke-width="2"/>
+  <path d="M410 203l10 6-10 6z" fill="#2f6a7a"/>
+
+  <!-- tokens -->
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="2.2">
+    <text x="440" y="176" font-size="12" fill="#9cc4cf">SINGLE-NUCLEOTIDE</text>
+  </g>
+  <g fill="#00b1d7">
+    <rect x="440" y="196" width="20" height="20" rx="4" opacity="0.9"/>
+    <rect x="468" y="196" width="20" height="20" rx="4" opacity="0.6"/>
+    <rect x="496" y="196" width="20" height="20" rx="4" opacity="0.8"/>
+    <rect x="524" y="196" width="20" height="20" rx="4" opacity="0.45"/>
+    <rect x="552" y="196" width="20" height="20" rx="4" opacity="0.85"/>
+    <rect x="580" y="196" width="20" height="20" rx="4" opacity="0.55"/>
+  </g>
+  <g fill="#00b1d7">
+    <rect x="440" y="224" width="20" height="20" rx="4" opacity="0.5"/>
+    <rect x="468" y="224" width="20" height="20" rx="4" opacity="0.8"/>
+    <rect x="496" y="224" width="20" height="20" rx="4" opacity="0.4"/>
+    <rect x="524" y="224" width="20" height="20" rx="4" opacity="0.9"/>
+    <rect x="552" y="224" width="20" height="20" rx="4" opacity="0.6"/>
+    <rect x="580" y="224" width="20" height="20" rx="4" opacity="0.75"/>
+  </g>
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="1.8">
+    <text x="440" y="288" font-size="11" fill="#5f8794">8K → 32K → 128K → 1M BP</text>
+  </g>
+
+  <!-- arrow tokens -> experts -->
+  <path d="M632 209h22" stroke="#2f6a7a" stroke-width="2"/>
+  <path d="M654 203l10 6-10 6z" fill="#2f6a7a"/>
+
+  <!-- experts -->
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="2.2">
+    <text x="688" y="176" font-size="12" fill="#9cc4cf">32 EXPERTS · TOP-2</text>
+  </g>
+  <g>
+    <g fill="#0e3a48" stroke="#1c5464" stroke-width="1.5">
+      <rect x="688" y="196" width="28" height="28" rx="6"/>
+      <rect x="726" y="196" width="28" height="28" rx="6"/>
+      <rect x="764" y="196" width="28" height="28" rx="6"/>
+      <rect x="802" y="196" width="28" height="28" rx="6"/>
+      <rect x="840" y="196" width="28" height="28" rx="6"/>
+      <rect x="878" y="196" width="28" height="28" rx="6"/>
+      <rect x="916" y="196" width="28" height="28" rx="6"/>
+      <rect x="954" y="196" width="28" height="28" rx="6"/>
+      <rect x="688" y="234" width="28" height="28" rx="6"/>
+      <rect x="726" y="234" width="28" height="28" rx="6"/>
+      <rect x="764" y="234" width="28" height="28" rx="6"/>
+      <rect x="802" y="234" width="28" height="28" rx="6"/>
+      <rect x="840" y="234" width="28" height="28" rx="6"/>
+      <rect x="878" y="234" width="28" height="28" rx="6"/>
+      <rect x="916" y="234" width="28" height="28" rx="6"/>
+      <rect x="954" y="234" width="28" height="28" rx="6"/>
+    </g>
+    <rect x="802" y="196" width="28" height="28" rx="6" fill="#00b1d7" opacity="0.9"/>
+    <rect x="916" y="234" width="28" height="28" rx="6" fill="#c07a2a" opacity="0.9"/>
+  </g>
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="1.8">
+    <text x="688" y="288" font-size="11" fill="#5f8794">SPARSE MoE · ROUTER PICKS 2</text>
+  </g>
+
+  <!-- stats right -->
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace">
+    <text x="1032" y="212" font-size="34" fill="#00b1d7">4.7B</text>
+    <text x="1032" y="230" font-size="9" fill="#7c9ea9" letter-spacing="1.4">TOTAL PARAMS</text>
+    <text x="1032" y="270" font-size="22" fill="#6fe0f5">330M</text>
+    <text x="1032" y="286" font-size="9" fill="#7c9ea9" letter-spacing="1.4">ACTIVE / PASS</text>
+  </g>
+
+  <!-- ============ EVALUATE ============ -->
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="3">
+    <text x="88" y="368" font-size="12" fill="#7c9ea9">02 · EVALUATE</text>
+    <path d="M232 363h880" stroke="#14414e" stroke-width="1"/>
+  </g>
+
+  <!-- embedding vector -->
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="2.2">
+    <text x="88" y="408" font-size="12" fill="#9cc4cf">FROZEN LAST-LAYER</text>
+  </g>
+  <g>
+    <path d="M88 506h268" stroke="#14414e" stroke-width="1"/>
+    <g fill="#00b1d7">
+      <rect x="90" y="466" width="4" height="40" rx="2" opacity="0.7"/>
+      <rect x="100" y="436" width="4" height="70" rx="2" opacity="0.85"/>
+      <rect x="110" y="478" width="4" height="28" rx="2" opacity="0.55"/>
+      <rect x="120" y="450" width="4" height="56" rx="2" opacity="0.9"/>
+      <rect x="130" y="490" width="4" height="16" rx="2" opacity="0.5"/>
+      <rect x="140" y="428" width="4" height="78" rx="2" opacity="0.8"/>
+      <rect x="150" y="472" width="4" height="34" rx="2" opacity="0.65"/>
+      <rect x="160" y="446" width="4" height="60" rx="2" opacity="0.9"/>
+      <rect x="170" y="484" width="4" height="22" rx="2" opacity="0.5"/>
+      <rect x="180" y="440" width="4" height="66" rx="2" opacity="0.75"/>
+      <rect x="190" y="496" width="4" height="10" rx="2" opacity="0.6"/>
+      <rect x="200" y="432" width="4" height="74" rx="2" opacity="0.85"/>
+      <rect x="210" y="458" width="4" height="48" rx="2" opacity="0.8"/>
+      <rect x="220" y="474" width="4" height="32" rx="2" opacity="0.55"/>
+      <rect x="230" y="424" width="4" height="82" rx="2" opacity="0.9"/>
+      <rect x="240" y="462" width="4" height="44" rx="2" opacity="0.7"/>
+      <rect x="250" y="486" width="4" height="20" rx="2" opacity="0.5"/>
+      <rect x="260" y="444" width="4" height="62" rx="2" opacity="0.85"/>
+      <rect x="270" y="470" width="4" height="36" rx="2" opacity="0.6"/>
+      <rect x="280" y="452" width="4" height="54" rx="2" opacity="0.8"/>
+      <rect x="290" y="482" width="4" height="24" rx="2" opacity="0.5"/>
+      <rect x="300" y="438" width="4" height="68" rx="2" opacity="0.75"/>
+      <rect x="310" y="460" width="4" height="46" rx="2" opacity="0.65"/>
+      <rect x="320" y="478" width="4" height="28" rx="2" opacity="0.55"/>
+      <rect x="330" y="448" width="4" height="58" rx="2" opacity="0.8"/>
+      <rect x="340" y="468" width="4" height="38" rx="2" opacity="0.6"/>
+    </g>
+  </g>
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="1.8">
+    <text x="88" y="530" font-size="11" fill="#5f8794">MEAN-POOLED GENOME EMBEDDING</text>
+  </g>
+
+  <!-- arrow embedding -> readouts -->
+  <path d="M394 470h24" stroke="#2f6a7a" stroke-width="2"/>
+  <path d="M418 464l10 6-10 6z" fill="#2f6a7a"/>
+
+  <!-- readout chips -->
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="2.2">
+    <text x="444" y="408" font-size="12" fill="#9cc4cf">LIGHTWEIGHT READOUTS · NO FINE-TUNING</text>
+  </g>
+  <g>
+    <rect x="444" y="436" width="124" height="64" rx="10" fill="#0b3341" stroke="#1c5464" stroke-width="1.5"/>
+    <rect x="580" y="436" width="124" height="64" rx="10" fill="#0b3341" stroke="#1c5464" stroke-width="1.5"/>
+    <rect x="716" y="436" width="124" height="64" rx="10" fill="#0b3341" stroke="#1c5464" stroke-width="1.5"/>
+    <rect x="852" y="436" width="124" height="64" rx="10" fill="#0b3341" stroke="#1c5464" stroke-width="1.5"/>
+    <rect x="988" y="436" width="124" height="64" rx="10" fill="#0b3341" stroke="#1c5464" stroke-width="1.5"/>
+  </g>
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="13" letter-spacing="1.6" text-anchor="middle">
+    <text x="506" y="473" fill="#6fe0f5">ARG</text>
+    <text x="642" y="473" fill="#6fe0f5">BGC</text>
+    <text x="778" y="473" fill="#6fe0f5">PHENOTYPE</text>
+    <text x="914" y="473" fill="#6fe0f5">CRC</text>
+    <text x="1050" y="473" fill="#6fe0f5">10K READS</text>
+  </g>
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="10" letter-spacing="1.2" text-anchor="middle" fill="#5f8794">
+    <text x="506" y="492">RESISTANCE</text>
+    <text x="642" y="492">CLUSTERS</text>
+    <text x="778" y="492">WHOLE GENOME</text>
+    <text x="914" y="492">COHORTS</text>
+    <text x="1050" y="492">LOW DEPTH</text>
+  </g>
+
+  <!-- footer -->
+  <path d="M88 578h1024" stroke="#14414e" stroke-width="1"/>
+  <g font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" letter-spacing="2.6">
+    <text x="88" y="612" font-size="12" fill="#00b1d7">1M BP CONTEXT · ONE 80 GB CARD</text>
+    <text x="1112" y="612" font-size="12" fill="#9cc4cf" text-anchor="end">OPEN WEIGHTS · CODE · DOCS</text>
+  </g>
+</svg>
