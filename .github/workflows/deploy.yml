@@ -1,0 +1,82 @@
+# Deploy the statically built Astro site to GitHub Pages.
+#
+# The site is published from `BioChaoGroup/blog`, so the public URL is
+# https://biochaogroup.github.io/blog/ and every internal link carries the
+# `/blog` base path. Both values are passed explicitly below so a local build and
+# a CI build cannot disagree (see astro.config.mjs).
+#
+# One-time setup on GitHub: Settings -> Pages -> Build and deployment ->
+# Source: "GitHub Actions". There is no `gh-pages` branch and no artifact is
+# committed to the repository.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least privilege: read the repository, publish to Pages, mint the OIDC token
+# that `deploy-pages` exchanges for a short-lived deployment credential.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Queue deployments instead of racing them: never cancel a deploy that is
+# already publishing, otherwise Pages can be left serving a torn build.
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+env:
+  SITE_URL: https://biochaogroup.github.io
+  SITE_BASE: /blog
+  ASTRO_TELEMETRY_DISABLED: '1'
+  NODE_VERSION: '24'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check content integrity
+        run: pnpm check:content
+
+      - name: Build site
+        run: pnpm build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

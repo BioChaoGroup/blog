@@ -1,0 +1,51 @@
+# Continuous integration: prove that a pull request can build the site before
+# it reaches `main`. Same toolchain as the deploy workflow, without any Pages
+# permissions and without publishing anything.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  SITE_URL: https://biochaogroup.github.io
+  SITE_BASE: /blog
+  ASTRO_TELEMETRY_DISABLED: '1'
+  NODE_VERSION: '24'
+
+jobs:
+  build:
+    name: Check and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check content integrity
+        run: pnpm check:content
+
+      - name: Check maintenance scripts
+        run: node --check scripts/sync-github.mjs
+
+      - name: Build site
+        run: pnpm build
