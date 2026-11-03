@@ -269,3 +269,26 @@ It parses `src/styles/tokens.css`, computes every text-on-surface pair and fails
 if anything drops below 4.5:1. The cyan and teal tokens are for graphics
 (tracks, diagrams, chips) only — they are intentionally not used for body text
 on white.
+
+
+## 6. The "BC" monogram
+
+`src/components/Logo.astro` and `public/favicon.svg` contain the Source Serif 4
+outlines for "B" and "C" (weight 700, slightly negative kerning) as SVG paths.
+Baking the glyphs keeps the mark identical in favicons (where webfonts cannot be
+loaded), in the Open Graph card and in print, without shipping a font.
+
+To regenerate the vector part after changing the wordmark, weight or tile
+colour:
+
+```sh
+python3 -m pip install --target /tmp/pylibs fonttools brotli
+PYTHONPATH=/tmp/pylibs python3 scripts/make-monogram.py
+```
+
+The script rewrites both files. The raster assets that reuse the mark
+(`public/og-default.png`, `public/icon-512.png`, `public/apple-touch-icon.png`)
+are rendered from `/tmp/og.html` and `/tmp/icon.html` with headless Chrome; the
+templates are documented in the script header and in §1 of this file. After any
+regeneration run `pnpm build` and check the header in both themes
+(`SHOT_THEME=dark pnpm shots --only home`).

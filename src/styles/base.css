@@ -490,8 +490,8 @@ a.tag:hover {
   width: 2.1rem;
   height: 2.1rem;
   flex: none;
-  border-radius: 7px;
-  overflow: hidden;
+  border-radius: 0;
+  overflow: visible;
 }
 
 .brand__text {
